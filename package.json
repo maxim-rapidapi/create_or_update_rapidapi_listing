@@ -1,0 +1,22 @@
+{
+  "name": "create_or_update_rapidapi_nodejs",
+  "version": "1.0.0",
+  "description": "GitHub Action to create or update an API on RapidAPI",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "bin": {
+    "create_or_update_rapidapi": "./bin/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "graphql-request": "^5.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.2.1",
+    "mock-fs": "^5.1.4"
+  }
+}
