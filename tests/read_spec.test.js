@@ -17,7 +17,7 @@ test('read a spec file into memory', () => {
 })
 
 test('fail to read a spec file into memory', () => {
-    const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {})
-    read_spec('foo')
-    expect(mockExit).toHaveBeenCalledWith(1)
+    expect(() => {
+        read_spec('foo')
+    }).toThrow('Could not read file: foo')
 })

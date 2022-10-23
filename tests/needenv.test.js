@@ -5,9 +5,9 @@ test('verify the existence of an environment variable ', () => {
     expect(needenv('FOO')).toBe('bar')
 })
 
-const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {})
 test('verify the absence of an environment variable ', () => {
     delete process.env.FOO
-    needenv('FOO')
-    expect(mockExit).toHaveBeenCalledWith(1)
+    expect(() => {
+        needenv('FOO')
+    }).toThrow('Environment variable FOO is undefined.')
 })

@@ -12,10 +12,6 @@ const process = require('process')
 const graphql = require('graphql-request')
 const util = require('util')
 
-function set_created_version_as_active() {
-    // tbd
-}
-
 function create_new_listing(spec_path) {
     // tbd
 }

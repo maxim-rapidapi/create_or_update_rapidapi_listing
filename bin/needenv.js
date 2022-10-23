@@ -8,8 +8,7 @@ function needenv(var_name) {
     if (res != undefined) {
         return res
     } else {
-        console.error('Environment variable ' + var_name + ' is undefined.')
-        process.exit(1)
+        throw 'Environment variable ' + var_name + ' is undefined.'
     }
 }
 

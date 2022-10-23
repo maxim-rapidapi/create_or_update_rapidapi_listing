@@ -12,12 +12,10 @@ function read_spec(oas) {
         try {
             return JSON.parse(spec)
         } catch (err) {
-            console.error("Couldn't parse file: " + oas)
-            process.exit(1)
+            throw "Couldn't parse file: " + oas
         }
     } catch (err) {
-        console.error('Could not read file: ' + oas)
-        process.exit(1)
+        throw 'Could not read file: ' + oas
     }
 }
 
