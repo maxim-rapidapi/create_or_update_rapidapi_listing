@@ -7,6 +7,7 @@ const { read_spec } = require('./read_spec')
 const { already_exists } = require('./already_exists')
 const { api_version_from_spec, api_name_from_spec, api_description_from_spec } = require('./parse_spec')
 const { get_current_api_version } = require('./get_current_api_version')
+const { graphql_headers, rest_headers } = require('./headers')
 
 const process = require('process')
 const graphql = require('graphql-request')
@@ -28,18 +29,9 @@ async function main() {
     const name = 'Email address verification'
     const spec_path = needenv('SPEC_PATH')
     const owner_id = needenv('OWNER_ID')
-    const x_rapidapi_key = needenv('X_RAPIDAPI_KEY')
-    const x_rapidapi_graphql_host = needenv('X_RAPIDAPI_GRAPHQL_HOST')
-    const x_rapidapi_rest_host = needenv('X_RAPIDAPI_REST_HOST')
-    const x_rapidapi_identity_key = needenv('X_RAPIDAPI_IDENTITY_KEY')
 
     const client = new graphql.GraphQLClient(process.env.GRAPHQL_URL, {
-        headers: {
-            'content-type': 'application/json',
-            'x-rapidapi-key': x_rapidapi_key,
-            'x-rapidapi-identity-key': x_rapidapi_identity_key,
-            'x-rapidapi-host': x_rapidapi_graphql_host,
-        },
+        headers: graphql_headers()
     })
 
     const j = read_spec(spec_path)
