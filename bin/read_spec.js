@@ -1,14 +1,13 @@
-const fs = require('fs').promises
+const fs = require('fs')
 
 /**
  * Return JSON string containing the contents of an OAS
  * @param {string} oas Path to OAS
  * @return {string} The contents of the OAS
  */
-async function read_spec(oas) {
-    // let spec
+function read_spec(oas) {
     try {
-        let spec = await fs.readFile(oas)
+        let spec = fs.readFileSync(oas)
         try {
             return JSON.parse(spec)
         } catch (err) {

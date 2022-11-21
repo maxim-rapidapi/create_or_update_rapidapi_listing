@@ -14,7 +14,6 @@ const util = require('util')
  * @return {string} The id of the newly created API
  */
 async function create_new_listing(filename) {
-    console.log('entering create_new_listing')
     let base_url = process.env.INPUT_REST_URL
     if (base_url == '' || base_url == null) {
         base_url = 'https://platform.p.rapidapi.com/'
@@ -38,10 +37,10 @@ async function create_new_listing(filename) {
     }
 
     try {
-        console.log(options)
+        // console.log(options)
         let response = await axios.request(options)
-        console.log(response.data)
-        console.log('almost existing create_new_listing')
+        // console.log(response.data)
+        // console.log('almost existing create_new_listing')
         return response.data['apiId']
     } catch (error) {
         console.log(error.response.data)

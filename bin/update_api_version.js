@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const FormData = require('form-data')
 const { plain_graphql_headers } = require('./headers')
+const core = require('@actions/core')
 
 /**
  * Creates and returns a new API version for a given API
@@ -12,6 +13,7 @@ const { plain_graphql_headers } = require('./headers')
  * @returns {string} The id of the newly created API version
  */
 async function update_api_version(spec_path, api_version_id) {
+    const graphql_url = core.getInput('GRAPHQL_URL', { required: true })
     const mutation = `
         mutation updateApisFromRapidOas($updates: [ApiUpdateFromRapidOasInput!]!) {
         updateApisFromRapidOas(updates: $updates) {
@@ -29,10 +31,13 @@ async function update_api_version(spec_path, api_version_id) {
     let fd = new FormData()
     fd.append('operations', JSON.stringify({ mutation, updates }))
     fd.append('map', '{"0": ["updates.updates.spec"]}')
-    fd.append(0, fs.createReadStream(spec_path), path.basename(spec_path))
+    fd.append(0, fs.createReadStream(spec_path), {
+        filename: path.basename(spec_path),
+        contentType: 'application/json',
+    })
 
     let res = await axios
-        .post(process.env.GRAPHQL_URL, fd, {
+        .post(graphql_url, fd, {
             headers: Object.assign(plain_graphql_headers(), fd.getHeaders()),
         })
         .catch((err) => {
