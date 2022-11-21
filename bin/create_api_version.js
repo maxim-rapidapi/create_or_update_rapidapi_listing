@@ -1,4 +1,5 @@
 const graphql = require('graphql-request')
+const util = require('util')
 
 /**
  * Creates and returns a new API version for a given API
@@ -16,15 +17,16 @@ async function create_api_version(version_name, api_id, client) {
     }`
 
     const params = {
-        where: {
+        apiVersions: {
             api: api_id,
             name: version_name,
         },
     }
 
     const data = await client.request(mutation, params)
-    console.log("new version: " + data.createApisVersions[0].id)
-    return data.createApisVersions[0].id
+    // console.log('new version: ' + util.inspect(data))
+    // console.log('parsed: ' + data.createApiVersions[0].id)
+    return data.createApiVersions[0].id
 }
 
 module.exports = { create_api_version }

@@ -8,6 +8,7 @@ const { get_current_version } = require('./get_current_version')
  * @return {object} An object containing the name and id of the latest version of this API
  */
 async function get_current_api_version(api_id, client) {
+    console.log("entering get_current_api_version")
     const query = graphql.gql`
     query apiVersions($where: ApiVersionWhereInput) {
         apiVersions(where: $where) {
@@ -27,6 +28,7 @@ async function get_current_api_version(api_id, client) {
     }
 
     const data = await client.request(query, variables)
+    console.log("almost leaving get_current_api_version")
     return get_current_version(data.apiVersions.nodes)
 }
 

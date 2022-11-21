@@ -1,0 +1,155 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "url": "https://gw.wzzrd.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "v1",
+      "description": "The project wiki",
+      "externalDocs": {
+        "url": "https://github.com/wzzrd/email_validator/wiki",
+        "description": "Project wiki"
+      }
+    }
+  ],
+  "paths": {
+    "/v1/validate": {
+      "post": {
+        "tags": [
+          "v1"
+        ],
+        "summary": "Validate the email address",
+        "externalDocs": {
+          "url": "https://github.com/wzzrd/email_validator/wiki",
+          "description": "Endpoint wiki"
+        },
+        "operationId": "/v1/validate",
+        "description": "Will provide information syntax validity, and split the address into domain and username parts",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Example response": {
+                    "value": {
+                      "address": "maxim@wzzrd.com",
+                      "domain": "wzzrd.com",
+                      "is_valid_syntax": true,
+                      "username": "maxim"
+                    },
+                    "summary": "Example response",
+                    "description": "Example response description"
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "type": "string"
+                    },
+                    "domain": {
+                      "type": "string"
+                    },
+                    "is_valid_syntax": {
+                      "type": "boolean"
+                    },
+                    "username": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "An example response": {
+                  "value": {
+                    "address": "maxim@wzzrd.com"
+                  },
+                  "summary": "An example response",
+                  "description": "Description of the example request"
+                }
+              },
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string"
+                  }
+                },
+                "externalDocs": {
+                  "url": "https://github.com/wzzrd/email_validator/wiki",
+                  "description": "Body external docs"
+                }
+              }
+            }
+          },
+          "description": ""
+        }
+      }
+    }
+  },
+  "info": {
+    "title": "Email validation - Wholesalz",
+    "version": "1.1.0",
+    "description": "The wholesale version of the email validation API; obviously redundant, since this API already appears to exist elsewhere.",
+    "x-category": "Other",
+    "x-long-description": "# readme bla bla bla\n\nAnd some more text\n",
+    "x-website": "https://www.wzzrd.com",
+    "x-public": true,
+    "x-thumbnail": "https://rapidapi-prod-apis.s3.amazonaws.com/8747fb4b-ed87-454b-ae2f-17a89e163318.png",
+    "x-version-lifecycle": "active",
+    "x-badges": [
+      {
+        "name": "region",
+        "value": "global"
+      },
+      {
+        "name": "security",
+        "value": "low"
+      },
+      {
+        "name": "env",
+        "value": "test"
+      }
+    ],
+    "termsOfService": "https:///www.wzzrd.com/tos",
+    "x-collections": [
+      "Most popular APIs"
+    ]
+  },
+  "security": [
+    {
+      "header_auth": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "header_auth": {
+        "name": "apikey",
+        "type": "apiKey",
+        "in": "header",
+        "description": "The key you use to authenticate to this API"
+      }
+    },
+    "schemas": {}
+  },
+  "x-gateways": [
+    {
+      "url": "gw.wzzrd.com"
+    }
+  ],
+  "x-documentation": {
+    "readme": "These are the docs?",
+    "tutorials": [],
+    "spotlights": []
+  }
+}

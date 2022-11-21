@@ -6,10 +6,12 @@
  * @return {object} An object containing the name and id of the latest version of this API
  */
 function get_current_version(versions) {
-    const current = versions.find(element => element.current == true)
+    console.log('entering get_current_version')
+    const current = versions.find((element) => element.current == true)
+    console.log('almost leaving get_current_version')
     return {
-        name: current.name, 
-        id: current.id
+        name: current.name,
+        id: current.id,
     }
 }
 

@@ -3,7 +3,7 @@
  * @param {string} spec The contents of a spec file
  * @returns {string} The contents of the version field in the info block
  */
-function api_version_from_spec(spec) {
+async function api_version_from_spec(spec) {
     return spec.info.version
 }
 
@@ -12,7 +12,7 @@ function api_version_from_spec(spec) {
  * @param {string} spec The contents of a spec file
  * @returns {string} The contents of the title field in the info block
  */
-function api_name_from_spec(spec) {
+async function api_name_from_spec(spec) {
     return spec.info.title
 }
 
@@ -21,7 +21,7 @@ function api_name_from_spec(spec) {
  * @param {string} spec The contents of a spec file
  * @returns {string} The contents of the description field in the info block
  */
-function api_description_from_spec(spec) {
+async function api_description_from_spec(spec) {
     return spec.info.description
 }
 
