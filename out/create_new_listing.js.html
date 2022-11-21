@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: read_spec.js</title>
+    <title>JSDoc: Source: create_new_listing.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: read_spec.js</h1>
+    <h1 class="page-title">Source: create_new_listing.js</h1>
 
     
 
@@ -26,29 +26,58 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const fs = require('fs').promises
+            <pre class="prettyprint source linenums"><code>const { rest_headers } = require('./headers')
+const axios = require('axios')
+const FormData = require('form-data')
+// const fs = require('fs')
+const fs = require('fs').promises
+const util = require('util')
+// const path = require('path')
 
 /**
- * Return JSON string containing the contents of an OAS
- * @param {string} oas Path to OAS
- * @return {string} The contents of the OAS
+ * Creates a new API listing on the RapidAPI (Enterprise) Hub
+ * This has to be based on the REST PAPI until the GraphQL PAPI parses
+ * metadata
+ * @param {string} filename Filename of the OAS to be uploaded
+ * @return {string} The id of the newly created API
  */
-async function read_spec(oas) {
-    // let spec
+async function create_new_listing(filename) {
+    console.log('entering create_new_listing')
+    let base_url = process.env.INPUT_REST_URL
+    if (base_url == '' || base_url == null) {
+        base_url = 'https://platform.p.rapidapi.com/'
+    }
+
+    let url = `${base_url}v1/apis/rapidapi-file`
+
+    const data = new FormData()
+    let oas = await fs.readFile(filename, 'utf8')
+    data.append('file', oas, { filename: 'spec.json', contentType: 'application/json' })
+
+    let papi_headers = rest_headers()
+    let form_headers = data.getHeaders()
+    let full_headers = Object.assign(papi_headers, form_headers)
+
+    const options = {
+        method: 'POST',
+        url: url,
+        headers: full_headers,
+        data: data,
+    }
+
     try {
-        let spec = await fs.readFile(oas)
-        try {
-            return JSON.parse(spec)
-        } catch (err) {
-            throw "Couldn't parse file: " + oas
-        }
-    } catch (err) {
-        console.log(err)
-        throw 'Could not read file: ' + oas
+        console.log(options)
+        let response = await axios.request(options)
+        console.log(response.data)
+        console.log('almost existing create_new_listing')
+        return response.data['apiId']
+    } catch (error) {
+        console.log(error.response.data)
+        console.log(error.code)
     }
 }
 
-module.exports = { read_spec }
+module.exports = { create_new_listing }
 </code></pre>
         </article>
     </section>

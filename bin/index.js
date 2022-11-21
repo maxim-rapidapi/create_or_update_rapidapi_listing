@@ -19,7 +19,6 @@ const semver = require('semver')
 
 async function main() {
     const spec_path = needenv('SPEC_PATH')
-    const owner_id = needenv('OWNER_ID')
 
     const client = new graphql.GraphQLClient(process.env.GRAPHQL_URL, {
         headers: graphql_headers(),
@@ -27,7 +26,7 @@ async function main() {
 
     const j = await read_spec(spec_path)
     const name = await api_name_from_spec(j)
-    const api_id = await already_exists(name, owner_id, client)
+    const api_id = await already_exists(name, client)
     if (api_id != null) {
         console.log('This is an existing API')
         console.log('The API is: ' + api_id)

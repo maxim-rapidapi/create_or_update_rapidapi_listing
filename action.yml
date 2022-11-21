@@ -17,9 +17,6 @@ inputs:
   spec_path:
     description: "Path to the OpenAPI spec file"
     required: true
-  owner_id:
-    description: "The RapidAPI ID of the user / team owning this API"
-    required: true
   graphql_url:
     description: "The URL to the GraphQL Platform API"
     required: true

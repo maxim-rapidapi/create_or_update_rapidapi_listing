@@ -104,7 +104,7 @@
     
 
     
-    <h4 class="name" id="already_exists"><span class="type-signature">(async) </span>already_exists<span class="signature">(name, owner_id, client)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="already_exists"><span class="type-signature">(async) </span>already_exists<span class="signature">(name, client)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -173,29 +173,6 @@ Returns null if not
 
         <tr>
             
-                <td class="name"><code>owner_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The id of the API owner</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>client</code></td>
             
 
@@ -253,7 +230,7 @@ Returns null if not
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="already_exists.js.html">already_exists.js</a>, <a href="already_exists.js.html#line12">line 12</a>
+        <a href="already_exists.js.html">already_exists.js</a>, <a href="already_exists.js.html#line11">line 11</a>
     </li></ul></dd>
     
 
@@ -311,7 +288,7 @@ Returns null if not
     
 
     
-    <h4 class="name" id="api_description_from_spec"><span class="type-signature"></span>api_description_from_spec<span class="signature">(spec)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="api_description_from_spec"><span class="type-signature">(async) </span>api_description_from_spec<span class="signature">(spec)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -470,7 +447,7 @@ Returns null if not
     
 
     
-    <h4 class="name" id="api_name_from_spec"><span class="type-signature"></span>api_name_from_spec<span class="signature">(spec)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="api_name_from_spec"><span class="type-signature">(async) </span>api_name_from_spec<span class="signature">(spec)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -629,7 +606,7 @@ Returns null if not
     
 
     
-    <h4 class="name" id="api_version_from_spec"><span class="type-signature"></span>api_version_from_spec<span class="signature">(spec)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="api_version_from_spec"><span class="type-signature">(async) </span>api_version_from_spec<span class="signature">(spec)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -760,6 +737,372 @@ Returns null if not
         
 <div class="param-desc">
     The contents of the version field in the info block
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="create_api_version"><span class="type-signature">(async) </span>create_api_version<span class="signature">(version_name, api_id, client)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Creates and returns a new API version for a given API
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>version_name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Version name or number for the new API version</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>api_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The id of the API to create a new version for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The GraphQL Client object for reuse</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="create_api_version.js.html">create_api_version.js</a>, <a href="create_api_version.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The id of the newly created API version
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="create_new_listing"><span class="type-signature">(async) </span>create_new_listing<span class="signature">(filename)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Creates a new API listing on the RapidAPI (Enterprise) Hub
+This has to be based on the REST PAPI until the GraphQL PAPI parses
+metadata
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>filename</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Filename of the OAS to be uploaded</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="create_new_listing.js.html">create_new_listing.js</a>, <a href="create_new_listing.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The id of the newly created API
 </div>
 
 
@@ -978,7 +1321,9 @@ Returns null if not
 
 
 <div class="description">
-    Select the version set as current from a list of api_versions
+    Select the version set as current from a list of api_versions <br/>
+There should always be a single API version set as current, so this function always
+returns a single object containing the name and id of the API version set as current.
 </div>
 
 
@@ -1071,7 +1416,7 @@ Returns null if not
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="get_current_version.js.html">get_current_version.js</a>, <a href="get_current_version.js.html#line6">line 6</a>
+        <a href="get_current_version.js.html">get_current_version.js</a>, <a href="get_current_version.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -1129,166 +1474,7 @@ Returns null if not
     
 
     
-    <h4 class="name" id="needenv"><span class="type-signature"></span>needenv<span class="signature">(var_name)</span><span class="type-signature"> &rarr; {string}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Verify an environment variable exists and return it; exits program if not
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>var_name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">name of the environment variable to be checked</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="needenv.js.html">needenv.js</a>, <a href="needenv.js.html#line6">line 6</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The environment variable
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="read_spec"><span class="type-signature"></span>read_spec<span class="signature">(oas)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="read_spec"><span class="type-signature">(async) </span>read_spec<span class="signature">(oas)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -1602,6 +1788,211 @@ Returns null if not
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="update_api_version"><span class="type-signature">(async) </span>update_api_version<span class="signature">(version_name, api_id, client)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Creates and returns a new API version for a given API
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>version_name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Version name or number for the new API version</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>api_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The id of the API to create a new version for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The GraphQL Client object for reuse</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="update_api_version.js.html">update_api_version.js</a>, <a href="update_api_version.js.html#line14">line 14</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The id of the newly created API version
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -1617,13 +2008,13 @@ Returns null if not
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#already_exists">already_exists</a></li><li><a href="global.html#api_description_from_spec">api_description_from_spec</a></li><li><a href="global.html#api_name_from_spec">api_name_from_spec</a></li><li><a href="global.html#api_version_from_spec">api_version_from_spec</a></li><li><a href="global.html#get_current_api_version">get_current_api_version</a></li><li><a href="global.html#get_current_version">get_current_version</a></li><li><a href="global.html#needenv">needenv</a></li><li><a href="global.html#read_spec">read_spec</a></li><li><a href="global.html#set_created_version_as_active">set_created_version_as_active</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#already_exists">already_exists</a></li><li><a href="global.html#api_description_from_spec">api_description_from_spec</a></li><li><a href="global.html#api_name_from_spec">api_name_from_spec</a></li><li><a href="global.html#api_version_from_spec">api_version_from_spec</a></li><li><a href="global.html#create_api_version">create_api_version</a></li><li><a href="global.html#create_new_listing">create_new_listing</a></li><li><a href="global.html#get_current_api_version">get_current_api_version</a></li><li><a href="global.html#get_current_version">get_current_version</a></li><li><a href="global.html#read_spec">read_spec</a></li><li><a href="global.html#set_created_version_as_active">set_created_version_as_active</a></li><li><a href="global.html#update_api_version">update_api_version</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sat Oct 22 2022 23:53:09 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 21 2022 16:16:00 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

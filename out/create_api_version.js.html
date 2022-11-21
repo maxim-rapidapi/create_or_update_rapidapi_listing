@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: read_spec.js</title>
+    <title>JSDoc: Source: create_api_version.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: read_spec.js</h1>
+    <h1 class="page-title">Source: create_api_version.js</h1>
 
     
 
@@ -26,29 +26,38 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const fs = require('fs').promises
+            <pre class="prettyprint source linenums"><code>const graphql = require('graphql-request')
+const util = require('util')
 
 /**
- * Return JSON string containing the contents of an OAS
- * @param {string} oas Path to OAS
- * @return {string} The contents of the OAS
+ * Creates and returns a new API version for a given API
+ * @param {*} version_name Version name or number for the new API version
+ * @param {*} api_id The id of the API to create a new version for
+ * @param {object} client The GraphQL Client object for reuse
+ * @returns {string} The id of the newly created API version
  */
-async function read_spec(oas) {
-    // let spec
-    try {
-        let spec = await fs.readFile(oas)
-        try {
-            return JSON.parse(spec)
-        } catch (err) {
-            throw "Couldn't parse file: " + oas
+async function create_api_version(version_name, api_id, client) {
+    const mutation = graphql.gql`
+    mutation createApiVersions($apiVersions: [ApiVersionCreateInput!]!) {
+        createApiVersions(apiVersions: $apiVersions) {
+            id
         }
-    } catch (err) {
-        console.log(err)
-        throw 'Could not read file: ' + oas
+    }`
+
+    const params = {
+        apiVersions: {
+            api: api_id,
+            name: version_name,
+        },
     }
+
+    const data = await client.request(mutation, params)
+    // console.log('new version: ' + util.inspect(data))
+    // console.log('parsed: ' + data.createApiVersions[0].id)
+    return data.createApiVersions[0].id
 }
 
-module.exports = { read_spec }
+module.exports = { create_api_version }
 </code></pre>
         </article>
     </section>
