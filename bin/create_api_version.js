@@ -23,8 +23,13 @@ async function create_api_version(version_name, api_id, client) {
         },
     }
 
-    const data = await client.request(mutation, params)
-    return data.createApiVersions[0].id
+    const res = await client.request(mutation, params)
+    if (res.status == 200) { 
+        return data.createApiVersions[0].id
+    } else {
+        throw new UnexpectedStatusError(`HTTP status is not 200, but ${res.status}`)
+    }
+
 }
 
 module.exports = { create_api_version }
