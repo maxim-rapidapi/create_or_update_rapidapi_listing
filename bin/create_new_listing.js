@@ -1,10 +1,9 @@
-const { rest_headers } = require('./headers')
 const axios = require('axios')
 const FormData = require('form-data')
-// const fs = require('fs')
 const fs = require('fs').promises
 const util = require('util')
-// const path = require('path')
+const { rest_headers } = require('./headers')
+const { UnexpectedStatusError } = require('./errors')
 
 /**
  * Creates a new API listing on the RapidAPI (Enterprise) Hub
