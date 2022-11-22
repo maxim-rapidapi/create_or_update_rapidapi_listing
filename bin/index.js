@@ -31,8 +31,8 @@ async function main() {
         console.log('This is an existing API')
         console.log('The API is: ' + api_id)
         const current_version = await get_current_api_version(api_id, client)
-        const parsed_spec_version = api_version_from_spec(j)
         const parsed_current_version = current_version.name
+        const parsed_spec_version = api_version_from_spec(j)
         console.log('Parsed spec version: ' + parsed_spec_version)
         console.log('Current version: ' + parsed_current_version)
         const spec_is_newer = semver.gt(parsed_spec_version, parsed_current_version)
