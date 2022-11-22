@@ -24,8 +24,6 @@ async function create_api_version(version_name, api_id, client) {
     }
 
     const data = await client.request(mutation, params)
-    // console.log('new version: ' + util.inspect(data))
-    // console.log('parsed: ' + data.createApiVersions[0].id)
     return data.createApiVersions[0].id
 }
 
