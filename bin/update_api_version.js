@@ -42,22 +42,17 @@ async function update_api_version(spec_path, api_version_id) {
         data: fd,
     }
 
-    try {
-        let res = await axios.request(options)
-        if (res.status == 200 && !res.data.errors) {
-            return res.status
-        } else if (res.status == 200 && res.data.errors && typeof res.data.errors == 'object') {
-            // this happens when an unknown collection is part of the spec; we get a 200, but
-            // also an unprocessable_entity error :/
-            error_message = []
-            res.data.errors.forEach((value) => error_message.push(value.message))
-            throw new SpecParsingError(`Error parsing spec: ${error_message}`)
-        } else {
-            throw new UnexpectedStatusError(`HTTP status is not 200, but ${res.status}`)
-        }
-    } catch (err) {
-        console.error('ended up in catching error land')
-        console.error(err)
+    let res = await axios.request(options)
+    if (res.status == 200 && !res.data.errors) {
+        return res.status
+    } else if (res.status == 200 && res.data.errors && typeof res.data.errors == 'object') {
+        // this happens when an unknown collection is part of the spec; we get a 200, but
+        // also an unprocessable_entity error :/
+        error_message = []
+        res.data.errors.forEach((value) => error_message.push(value.message))
+        throw new SpecParsingError(`Error parsing spec: ${error_message}`)
+    } else {
+        throw new UnexpectedStatusError(`HTTP status is not 200, but ${res.status}`)
     }
 }
 
