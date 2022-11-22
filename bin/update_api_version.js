@@ -1,9 +1,9 @@
 const axios = require('axios')
 const fs = require('fs').promises
-const path = require('path')
 const FormData = require('form-data')
-const { plain_graphql_headers } = require('./headers')
 const core = require('@actions/core')
+const { form_graphql_headers } = require('./headers')
+const { SpecParsingError, UnexpectedStatusrror } = require('./errors')
 
 /**
  * Creates and returns a new API version for a given API
@@ -42,13 +42,23 @@ async function update_api_version(spec_path, api_version_id) {
         data: fd,
     }
 
-    let res = await axios.request(options).catch((err) => {
-        console.error(err.response.data)
-    })
-    // console.log(res)
-    // console.log(res.status)
-    // console.log(res.data.errors)
-    return res
+    try {
+        let res = await axios.request(options)
+        if (res.status == 200 && !res.data.errors) {
+            return res.status
+        } else if (res.status == 200 && res.data.errors && typeof res.data.errors == 'object') {
+            // this happens when an unknown collection is part of the spec; we get a 200, but
+            // also an unprocessable_entity error :/
+            error_message = []
+            res.data.errors.forEach((value) => error_message.push(value.message))
+            throw new SpecParsingError(`Error parsing spec: ${error_message}`)
+        } else {
+            throw new UnexpectedStatusError(`HTTP status is not 200, but ${res.status}`)
+        }
+    } catch (err) {
+        console.error('ended up in catching error land')
+        console.error(err)
+    }
 }
 
 module.exports = { update_api_version }
