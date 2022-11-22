@@ -1,4 +1,4 @@
-const { SemVer } = require('semver')
+const semverValid = require('semver/functions/valid')
 const { SpecParsingError } = require('./errors')
 
 /**
@@ -10,7 +10,7 @@ function api_version_from_spec(spec) {
     if (spec.info.version == undefined) {
         throw new SpecParsingError("No property 'version' in spec")
     } else {
-        if (SemVer.valid(spec.info.version)) {
+        if (semverValid(spec.info.version)) {
             return spec.info.version
         } else {
             throw new SpecParsingError(`Not a valid version according to semver: ${spec.info.version}`)
