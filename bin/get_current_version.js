@@ -1,4 +1,4 @@
-const { SemVer } = require('semver')
+const semverValid = require('semver/functions/valid')
 
 /**
  * Select the version set as current from a list of api_versions <br/>
@@ -12,7 +12,7 @@ function get_current_version(versions) {
     if (current == undefined) {
         throw new NoCurrentVersionError('No version is marked as current. That should be impossible!')
     } else {
-        if (SemVer.valid(current.name)) {
+        if (semverValid(current.name) != null) {
             return {
                 name: current.name,
                 id: current.id,
