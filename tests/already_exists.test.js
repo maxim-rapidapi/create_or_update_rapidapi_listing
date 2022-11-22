@@ -20,7 +20,7 @@ const return_id_one = 'the_id_we_are_looking_for'
 test('test graphql papi already_exists query contents', async () => {
     const c = new graphql.GraphQLClient()
     const mockClient = jest.spyOn(c, 'request').mockImplementation((query, variables) => JSON.parse(return_data_one))
-    const res = await already_exists('My API', 12345678, c)
+    const res = await already_exists('My API', c)
     expect(res).toEqual(return_id_one)
 })
 
