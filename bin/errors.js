@@ -19,7 +19,7 @@ class SpecParsingError extends Error {
     }
 }
 
-class UnexpectedStatusrror extends Error {
+class UnexpectedStatusError extends Error {
     constructor(message) {
         super(message)
         this.name = this.constructor.name
