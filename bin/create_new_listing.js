@@ -36,13 +36,13 @@ async function create_new_listing(filename) {
     }
 
     const res = await axios.request(options)
-    if (res.status == 200) {
+    if (res.status == 201) {
         return {
-            apiId: res.data['apiId'],
-            apiVersionId: res.data['apiVersionId'],
+            apiId: res.data.apiId,
+            apiVersionId: res.data.apiVersionId,
         }
     } else {
-        throw new UnexpectedStatusError(`HTTP status is not 200, but ${res.status}`)
+        throw new UnexpectedStatusError(`HTTP status is not 201, but ${res.status}`)
     }
 }
 
