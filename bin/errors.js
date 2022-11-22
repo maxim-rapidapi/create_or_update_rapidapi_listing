@@ -26,4 +26,4 @@ class UnexpectedStatusError extends Error {
     }
 }
 
-module.exports = { InvalidCollectionError, NoCurrentVersionError, SpecParsingError, UnexpectedStatusrror }
+module.exports = { InvalidCollectionError, NoCurrentVersionError, SpecParsingError, UnexpectedStatusError }
