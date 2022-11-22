@@ -36,4 +36,4 @@ function rest_headers() {
     }
 }
 
-module.exports = { plain_graphql_headers, graphql_headers, rest_headers }
+module.exports = { form_graphql_headers, graphql_headers, rest_headers }
