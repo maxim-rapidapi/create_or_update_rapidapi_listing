@@ -24,8 +24,8 @@ async function main() {
         headers: graphql_headers(),
     })
 
-    const j = read_spec(spec_path)
-    const name = api_name_from_spec(j)
+    const spec = read_spec(spec_path)
+    const name = api_name_from_spec(spec)
     const api_id = await already_exists(name, client)
     if (api_id != null) {
         // Provide some data about the API
@@ -33,10 +33,10 @@ async function main() {
         console.log('The API is: ' + api_id)
         const current_version = await get_current_api_version(api_id, client)
         const parsed_current_version = current_version.name
-        const parsed_spec_version = api_version_from_spec(j)
+        const parsed_spec_version = api_version_from_spec(spec)
         console.log('Version in spec: ' + parsed_spec_version)
         console.log('Version on Hub: ' + parsed_current_version)
-        
+
         // Only create a new API version if the provided spec's version is higher than
         // the version already on the Hub
         const spec_is_newer = semver.gt(parsed_spec_version, parsed_current_version)
@@ -44,7 +44,7 @@ async function main() {
         if (spec_is_newer) {
             const new_version_id = await create_api_version(parsed_spec_version, api_id, client)
             console.log('New version id: ' + new_version_id)
-            const res = await update_api_version(spec_path, new_version_id)
+            await update_api_version(spec_path, new_version_id)
         } else {
             console.warn('Spec was not newer, not creating new version.')
         }
