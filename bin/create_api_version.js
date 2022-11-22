@@ -1,5 +1,6 @@
 const graphql = require('graphql-request')
 const util = require('util')
+const { UnexpectedResponseError } = require('./errors')
 
 /**
  * Creates and returns a new API version for a given API
@@ -23,13 +24,17 @@ async function create_api_version(version_name, api_id, client) {
         },
     }
 
-    const res = await client.request(mutation, params)
-    if (res.status == 200) { 
-        return data.createApiVersions[0].id
-    } else {
-        throw new UnexpectedStatusError(`HTTP status is not 200, but ${res.status}`)
+    try {
+        const res = await client.request(mutation, params)
+        if (res.errors != undefined) {
+            throw new UnexpectedResponseError(`Unable to create new API version: ${res.errors[0].message}`)
+        } else {
+            return res.createApiVersions[0].id
+        }
+    } catch (err) {
+        console.log(err)
+        throw 'Unknown error in get_current_api_version'
     }
-
 }
 
 module.exports = { create_api_version }
