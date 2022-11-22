@@ -36,15 +36,14 @@ async function create_new_listing(filename) {
         data: data,
     }
 
-    try {
-        // console.log(options)
-        let response = await axios.request(options)
-        // console.log(response.data)
-        // console.log('almost existing create_new_listing')
-        return response.data['apiId']
-    } catch (error) {
-        console.log(error.response.data)
-        console.log(error.code)
+    const res = await axios.request(options)
+    if (res.status == 200) {
+        return {
+            apiId: res.data['apiId'],
+            apiVersionId: res.data['apiVersionId'],
+        }
+    } else {
+        throw new UnexpectedStatusError(`HTTP status is not 200, but ${res.status}`)
     }
 }
 
