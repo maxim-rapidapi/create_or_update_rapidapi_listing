@@ -1,5 +1,5 @@
 const axios = require('axios')
-const fs = require('fs')
+const fs = require('fs').promises
 const path = require('path')
 const FormData = require('form-data')
 const { plain_graphql_headers } = require('./headers')
@@ -14,36 +14,40 @@ const core = require('@actions/core')
  */
 async function update_api_version(spec_path, api_version_id) {
     const graphql_url = core.getInput('GRAPHQL_URL', { required: true })
-    const mutation = `
+    const query = `
         mutation updateApisFromRapidOas($updates: [ApiUpdateFromRapidOasInput!]!) {
         updateApisFromRapidOas(updates: $updates) {
             apiId
         }
     }`
 
-    const updates = {
+    const variables = {
         updates: {
             spec: null,
             apiVersionId: api_version_id,
         },
     }
 
-    let fd = new FormData()
-    fd.append('operations', JSON.stringify({ mutation, updates }))
-    fd.append('map', '{"0": ["updates.updates.spec"]}')
-    fd.append(0, fs.createReadStream(spec_path), {
-        filename: path.basename(spec_path),
-        contentType: 'application/json',
-    })
+    let updates_file = await fs.readFile(spec_path, 'utf-8')
 
-    let res = await axios
-        .post(graphql_url, fd, {
-            headers: Object.assign(plain_graphql_headers(), fd.getHeaders()),
-        })
-        .catch((err) => {
-            console.error(err)
-        })
-    console.log(res)
+    let fd = new FormData()
+    fd.append('operations', JSON.stringify({ query, variables }))
+    fd.append('map', '{"0":["variables.updates.spec"]}')
+    fd.append('0', updates_file, { filename: 'spec.json', contentType: 'application/json' })
+
+    let options = {
+        method: 'POST',
+        url: graphql_url,
+        headers: Object.assign(form_graphql_headers(), fd.getHeaders()),
+        data: fd,
+    }
+
+    let res = await axios.request(options).catch((err) => {
+        console.error(err.response.data)
+    })
+    // console.log(res)
+    // console.log(res.status)
+    // console.log(res.data.errors)
     return res
 }
 
