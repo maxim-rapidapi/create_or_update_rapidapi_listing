@@ -26,8 +26,16 @@ async function get_current_api_version(api_id, client) {
         },
     }
 
-    const data = await client.request(query, variables)
-    return get_current_version(data.apiVersions.nodes)
+    try {
+        let res = await client.request(query, variables)
+        if (res.status == 200) {
+            return get_current_version(res.apiVersions.nodes)
+        } else {
+          throw new UnexpectedStatusError(`HTTP status is not 200, but ${res.status}`)
+        }
+    } catch (err) {
+        throw "Unknown error in get_current_api_version"
+    }
 }
 
 module.exports = { get_current_api_version }
