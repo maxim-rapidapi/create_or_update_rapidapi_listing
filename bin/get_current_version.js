@@ -7,9 +7,13 @@
  */
 function get_current_version(versions) {
     const current = versions.find((element) => element.current == true)
-    return {
-        name: current.name,
-        id: current.id,
+    if (current == undefined) {
+        throw new NoCurrentVersionError('No version is marked as current. That should be impossible!')
+    } else {
+        return {
+            name: current.name,
+            id: current.id,
+        }
     }
 }
 

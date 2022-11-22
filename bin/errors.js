@@ -5,6 +5,13 @@ class InvalidCollectionError extends Error {
     }
 }
 
+class NoCurrentVersionError extends Error {
+    constructor(message) {
+        super(message)
+        this.name = this.constructor.name
+    }
+}
+
 class SpecParsingError extends Error {
     constructor(message) {
         super(message)
@@ -19,4 +26,4 @@ class UnexpectedStatusrror extends Error {
     }
 }
 
-module.exports = { InvalidCollectionError, SpecParsingError, UnexpectedStatusrror }
+module.exports = { InvalidCollectionError, NoCurrentVersionError, SpecParsingError, UnexpectedStatusrror }
