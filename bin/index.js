@@ -28,13 +28,17 @@ async function main() {
     const name = api_name_from_spec(j)
     const api_id = await already_exists(name, client)
     if (api_id != null) {
+        // Provide some data about the API
         console.log('This is an existing API')
         console.log('The API is: ' + api_id)
         const current_version = await get_current_api_version(api_id, client)
         const parsed_current_version = current_version.name
         const parsed_spec_version = api_version_from_spec(j)
-        console.log('Parsed spec version: ' + parsed_spec_version)
-        console.log('Current version: ' + parsed_current_version)
+        console.log('Version in spec: ' + parsed_spec_version)
+        console.log('Version on Hub: ' + parsed_current_version)
+        
+        // Only create a new API version if the provided spec's version is higher than
+        // the version already on the Hub
         const spec_is_newer = semver.gt(parsed_spec_version, parsed_current_version)
         console.log('Uploaded spec is newer: ' + spec_is_newer)
         if (spec_is_newer) {
