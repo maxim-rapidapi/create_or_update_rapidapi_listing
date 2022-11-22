@@ -50,9 +50,9 @@ async function main() {
         }
     } else {
         console.log('This is a new API')
-        const { new_api_id, new_version_id } = await create_new_listing(spec_path)
-        console.log('New api id: ' + new_api_id)
-        console.log('Initial version id: ' + new_version_id)
+        const new_api = await create_new_listing(spec_path)
+        console.log('New api id: ' + new_api.apiId)
+        console.log('Initial version id: ' + new_api.apiVersionId)
     }
 }
 
