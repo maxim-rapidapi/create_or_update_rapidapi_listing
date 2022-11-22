@@ -1,5 +1,6 @@
 const graphql = require('graphql-request')
 const { get_current_version } = require('./get_current_version')
+const { NoCurrentVersionError } = require('./errors')
 
 /**
  * Fetch the id of the latest version of an API
@@ -28,13 +29,14 @@ async function get_current_api_version(api_id, client) {
 
     try {
         let res = await client.request(query, variables)
-        if (res.status == 200) {
+        if (res.apiVersions.nodes.length > 0) {
             return get_current_version(res.apiVersions.nodes)
         } else {
-          throw new UnexpectedStatusError(`HTTP status is not 200, but ${res.status}`)
+            throw new NoCurrentVersionError('No API versions found')
         }
     } catch (err) {
-        throw "Unknown error in get_current_api_version"
+        console.log(err)
+        throw 'Unknown error in get_current_api_version'
     }
 }
 
