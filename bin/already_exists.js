@@ -9,7 +9,6 @@ const graphql = require('graphql-request')
  * @return {string} The id of the existing API
  */
 async function already_exists(name, client) {
-    console.log('entering already_exists')
     const query = graphql.gql`
     query api($where: ApiWhereInput) {
         apis(where: $where) {
