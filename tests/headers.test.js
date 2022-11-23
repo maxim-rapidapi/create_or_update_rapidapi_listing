@@ -2,12 +2,12 @@ const return_graphql_object = {
     'content-type': 'application/json',
     'x-rapidapi-key': 'rapidapi_key',
     'x-rapidapi-identity-key': 'rapidapi_identity_key',
-    'x-rapidapi-host': 'rapidapi_graphql_host'
+    'x-rapidapi-host': 'rapidapi_graphql_host',
 }
 
 const return_rest_object = {
     'x-rapidapi-key': 'rapidapi_key',
-    'x-rapidapi-host': 'rapidapi_rest_host'
+    'x-rapidapi-host': 'rapidapi_rest_host',
 }
 
 test('verify the correct creation of graphql header object', () => {

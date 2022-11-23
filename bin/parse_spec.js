@@ -13,7 +13,9 @@ function api_version_from_spec(spec) {
         if (semverValid(spec.info.version)) {
             return spec.info.version
         } else {
-            throw new SpecParsingError(`Not a valid version according to semver: ${spec.info.version}`)
+            throw new SpecParsingError(
+                `Not a valid version according to semver: ${spec.info.version}`
+            )
         }
     }
 }
@@ -44,4 +46,8 @@ function api_description_from_spec(spec) {
     }
 }
 
-module.exports = { api_version_from_spec, api_name_from_spec, api_description_from_spec }
+module.exports = {
+    api_version_from_spec,
+    api_name_from_spec,
+    api_description_from_spec,
+}

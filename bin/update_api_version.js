@@ -33,7 +33,10 @@ async function update_api_version(spec_path, api_version_id) {
     let fd = new FormData()
     fd.append('operations', JSON.stringify({ query, variables }))
     fd.append('map', '{"0":["variables.updates.spec"]}')
-    fd.append('0', updates_file, { filename: 'spec.json', contentType: 'application/json' })
+    fd.append('0', updates_file, {
+        filename: 'spec.json',
+        contentType: 'application/json',
+    })
 
     let options = {
         method: 'POST',
@@ -45,14 +48,20 @@ async function update_api_version(spec_path, api_version_id) {
     let res = await axios.request(options)
     if (res.status == 200 && !res.data.errors) {
         return res.status
-    } else if (res.status == 200 && res.data.errors && typeof res.data.errors == 'object') {
+    } else if (
+        res.status == 200 &&
+        res.data.errors &&
+        typeof res.data.errors == 'object'
+    ) {
         // this happens when an unknown collection is part of the spec; we get a 200, but
         // also an unprocessable_entity error :/
         error_message = []
         res.data.errors.forEach((value) => error_message.push(value.message))
         throw new SpecParsingError(`Error parsing spec: ${error_message}`)
     } else {
-        throw new UnexpectedStatusError(`HTTP status is not 200, but ${res.status}`)
+        throw new UnexpectedStatusError(
+            `HTTP status is not 200, but ${res.status}`
+        )
     }
 }
 

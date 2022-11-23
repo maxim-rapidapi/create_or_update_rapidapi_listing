@@ -1,4 +1,8 @@
-const { api_version_from_spec, api_name_from_spec, api_description_from_spec } = require('../bin/parse_spec')
+const {
+    api_version_from_spec,
+    api_name_from_spec,
+    api_description_from_spec,
+} = require('../bin/parse_spec')
 
 test('return the version of a spec file correctly', () => {
     expect(api_version_from_spec(JSON.parse(my_spec))).toBe('1.0.1')
@@ -9,7 +13,9 @@ test('return the name of an API correctly from an OAS', () => {
 })
 
 test('return the description of an API correctly from an OAS', () => {
-    expect(api_description_from_spec(JSON.parse(my_spec))).toBe("The API's description")
+    expect(api_description_from_spec(JSON.parse(my_spec))).toBe(
+        "The API's description"
+    )
 })
 
 const my_spec = `{

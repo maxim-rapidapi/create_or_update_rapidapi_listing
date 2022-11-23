@@ -27,7 +27,9 @@ async function create_api_version(version_name, api_id, client) {
     try {
         const res = await client.request(mutation, params)
         if (res.errors != undefined) {
-            throw new UnexpectedResponseError(`Unable to create new API version: ${res.errors[0].message}`)
+            throw new UnexpectedResponseError(
+                `Unable to create new API version: ${res.errors[0].message}`
+            )
         } else {
             return res.createApiVersions[0].id
         }

@@ -18,7 +18,10 @@ const version_list = [
         versionStatus: 'active',
     },
 ]
-const expected = { id: 'apiversion_a6ee5ca5-3bca-47b0-95a6-ba02c06fbddb', name: '0.4.3' }
+const expected = {
+    id: 'apiversion_a6ee5ca5-3bca-47b0-95a6-ba02c06fbddb',
+    name: '0.4.3',
+}
 test('gets the current version from a list of apiVersions', () => {
     expect(get_current_version(version_list)).toStrictEqual(expected)
 })

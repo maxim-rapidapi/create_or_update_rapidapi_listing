@@ -10,7 +10,9 @@ const semverValid = require('semver/functions/valid')
 function get_current_version(versions) {
     const current = versions.find((element) => element.current == true)
     if (current == undefined) {
-        throw new NoCurrentVersionError('No version is marked as current. That should be impossible!')
+        throw new NoCurrentVersionError(
+            'No version is marked as current. That should be impossible!'
+        )
     } else {
         if (semverValid(current.name) != null) {
             return {
@@ -18,7 +20,9 @@ function get_current_version(versions) {
                 id: current.id,
             }
         } else {
-            throw new SpecParsingError(`Not a valid version according to semver: ${current.name}`)
+            throw new SpecParsingError(
+                `Not a valid version according to semver: ${current.name}`
+            )
         }
     }
 }

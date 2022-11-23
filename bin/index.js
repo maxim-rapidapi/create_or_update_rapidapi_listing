@@ -39,10 +39,17 @@ async function main() {
 
         // Only create a new API version if the provided spec's version is higher than
         // the version already on the Hub
-        const spec_is_newer = semver.gt(parsed_spec_version, parsed_current_version)
+        const spec_is_newer = semver.gt(
+            parsed_spec_version,
+            parsed_current_version
+        )
         console.log('Uploaded spec is newer: ' + spec_is_newer)
         if (spec_is_newer) {
-            const new_version_id = await create_api_version(parsed_spec_version, api_id, client)
+            const new_version_id = await create_api_version(
+                parsed_spec_version,
+                api_id,
+                client
+            )
             console.log('New version id: ' + new_version_id)
             await update_api_version(spec_path, new_version_id)
         } else {

@@ -21,8 +21,11 @@ async function create_new_listing(filename) {
     let url = `${base_url}v1/apis/rapidapi-file`
 
     const data = new FormData()
-    let oas = fs.readFile(filename, 'utf8')
-    data.append('file', oas, { filename: 'spec.json', contentType: 'application/json' })
+    let oas = fs.readFileSync(filename)
+    data.append('file', oas, {
+        filename: 'spec.json',
+        contentType: 'application/json',
+    })
 
     let papi_headers = rest_headers()
     let form_headers = data.getHeaders()
@@ -43,7 +46,9 @@ async function create_new_listing(filename) {
                 apiVersionId: res.data.apiVersionId,
             }
         } else {
-            throw new UnexpectedStatusError(`HTTP status is not 201, but ${res.status}`)
+            throw new UnexpectedStatusError(
+                `HTTP status is not 201, but ${res.status}`
+            )
         }
     } catch (err) {
         throw new PlatformAPIError(`Platform API error: ${err}`)

@@ -11,8 +11,12 @@ const contents = JSON.stringify({
 })
 
 test('read a spec file into memory', () => {
-    const mockRead = jest.spyOn(fs, 'readFileSync').mockImplementation((filename) => contents)
-    expect(read_spec('/home/someuser/test_spec.json')).toStrictEqual(JSON.parse(contents))
+    const mockRead = jest
+        .spyOn(fs, 'readFileSync')
+        .mockImplementation((filename) => contents)
+    expect(read_spec('/home/someuser/test_spec.json')).toStrictEqual(
+        JSON.parse(contents)
+    )
     mockRead.mockRestore()
 })
 
