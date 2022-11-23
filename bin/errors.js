@@ -12,6 +12,13 @@ class NoCurrentVersionError extends Error {
     }
 }
 
+class PlatformAPIError extends Error {
+    constructor(message) {
+        super(message)
+        this.name = this.constructor.name
+    }
+}
+
 class SpecParsingError extends Error {
     constructor(message) {
         super(message)
@@ -36,6 +43,7 @@ class UnexpectedStatusError extends Error {
 module.exports = {
     InvalidCollectionError,
     NoCurrentVersionError,
+    PlatformAPIError,
     SpecParsingError,
     UnexpectedResponseError,
     UnexpectedStatusError,

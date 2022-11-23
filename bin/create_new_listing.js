@@ -1,9 +1,9 @@
 const axios = require('axios')
 const FormData = require('form-data')
-const fs = require('fs').promises
+const fs = require('fs')
 const util = require('util')
 const { rest_headers } = require('./headers')
-const { UnexpectedStatusError } = require('./errors')
+const { PlatformAPIError, UnexpectedStatusError } = require('./errors')
 
 /**
  * Creates a new API listing on the RapidAPI (Enterprise) Hub
@@ -21,7 +21,7 @@ async function create_new_listing(filename) {
     let url = `${base_url}v1/apis/rapidapi-file`
 
     const data = new FormData()
-    let oas = await fs.readFile(filename, 'utf8')
+    let oas = fs.readFile(filename, 'utf8')
     data.append('file', oas, { filename: 'spec.json', contentType: 'application/json' })
 
     let papi_headers = rest_headers()
@@ -35,14 +35,18 @@ async function create_new_listing(filename) {
         data: data,
     }
 
-    const res = await axios.request(options)
-    if (res.status == 201) {
-        return {
-            apiId: res.data.apiId,
-            apiVersionId: res.data.apiVersionId,
+    try {
+        const res = await axios.request(options)
+        if (res.status == 201) {
+            return {
+                apiId: res.data.apiId,
+                apiVersionId: res.data.apiVersionId,
+            }
+        } else {
+            throw new UnexpectedStatusError(`HTTP status is not 201, but ${res.status}`)
         }
-    } else {
-        throw new UnexpectedStatusError(`HTTP status is not 201, but ${res.status}`)
+    } catch (err) {
+        throw new PlatformAPIError(`Platform API error: ${err}`)
     }
 }
 
