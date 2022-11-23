@@ -35,7 +35,7 @@ async function create_api_version(version_name, api_id, client) {
         }
     } catch (err) {
         console.log(err)
-        throw 'Unknown error in get_current_api_version'
+        throw 'Unknown error in create_api_version'
     }
 }
 
