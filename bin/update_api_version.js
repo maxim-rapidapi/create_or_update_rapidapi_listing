@@ -3,7 +3,7 @@ const fs = require('fs')
 const FormData = require('form-data')
 const core = require('@actions/core')
 const { form_graphql_headers } = require('./headers')
-const { SpecParsingError, UnexpectedStatusrror } = require('./errors')
+const { SpecParsingError } = require('./errors')
 
 /**
  * Creates and returns a new API version for a given API
@@ -28,7 +28,7 @@ async function update_api_version(spec_path, api_version_id) {
         },
     }
 
-    let updates_file = fs.readFile(spec_path)
+    let updates_file = fs.readFileSync(spec_path)
 
     let fd = new FormData()
     fd.append('operations', JSON.stringify({ query, variables }))

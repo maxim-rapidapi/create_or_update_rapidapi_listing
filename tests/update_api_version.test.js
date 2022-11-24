@@ -23,7 +23,7 @@ const res = {
 
 test('handling update_api_version reponse', async () => {
     const mockRead = jest
-        .spyOn(fs, 'readFile')
+        .spyOn(fs, 'readFileSync')
         .mockImplementation((filename) => contents)
     nock('https://platform-graphql.p.rapidapi.com').post('/').reply(200, res)
     expect(
