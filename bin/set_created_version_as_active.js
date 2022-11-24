@@ -10,8 +10,6 @@ async function set_created_version_as_active(api_version_id, client) {
         mutation updateApiVersions($apiVersions: [ApiVersionUpdateInput!]!) {
           updateApiVersions(apiVersions: $apiVersions) {
             id
-            name
-            current
           }
         }
     `
@@ -20,7 +18,7 @@ async function set_created_version_as_active(api_version_id, client) {
         apiVersions: [
             {
                 apiVersionId: api_version_id,
-                current: True,
+                current: true,
                 versionStatus: 'active',
             },
         ],
