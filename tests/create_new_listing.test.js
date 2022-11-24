@@ -1,7 +1,6 @@
 const { create_new_listing } = require('../bin/create_new_listing')
 const nock = require('nock')
 const fs = require('fs')
-const { PlatformAPIError } = require('../bin/errors')
 
 const contents = JSON.stringify({
     openapi: '3.0.0',
