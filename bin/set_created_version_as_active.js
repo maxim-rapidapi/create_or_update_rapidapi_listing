@@ -1,4 +1,5 @@
 const graphql = require('graphql-request')
+const { PlatformAPIError } = require('./errors')
 
 /**
  * Set the newly created version of the API as the current one
@@ -24,7 +25,11 @@ async function set_created_version_as_active(api_version_id, client) {
         ],
     }
 
-    await client.request(mutation, variables)
+    try {
+        await client.request(mutation, variables)
+    } catch (err) {
+        throw new PlatformAPIError(`Platform API error: ${err}`)
+    }
 }
 
 module.exports = { set_created_version_as_active }
