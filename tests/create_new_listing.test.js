@@ -19,7 +19,7 @@ const res = {
 
 test('handling create_new_listing reponse', async () => {
     const mockRead = jest
-        .spyOn(fs, 'readFile')
+        .spyOn(fs, 'readFileSync')
         .mockImplementation((filename) => contents)
     nock('https://platform-rest.p.rapidapi.com')
         .post('/v1/apis/rapidapi-file')
@@ -35,7 +35,7 @@ test('handling create_new_listing reponse', async () => {
 
 test('error handling of 404 reponse', async () => {
     const mockRead = jest
-        .spyOn(fs, 'readFile')
+        .spyOn(fs, 'readFileSync')
         .mockImplementation((filename) => contents)
     nock('https://platform-rest.p.rapidapi.com')
         .post('/v1/apis/rapidapi-file')
@@ -50,7 +50,7 @@ test('error handling of 404 reponse', async () => {
 
 test('error handling of non-201 reponse', async () => {
     const mockRead = jest
-        .spyOn(fs, 'readFile')
+        .spyOn(fs, 'readFileSync')
         .mockImplementation((filename) => contents)
     nock('https://platform-rest.p.rapidapi.com')
         .post('/v1/apis/rapidapi-file')
