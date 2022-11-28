@@ -17,11 +17,19 @@ test('handling create_new_listing reponse', async () => {
     const mockRead = jest
         .spyOn(fs, 'readFileSync')
         .mockImplementation((filename) => contents)
-    nock('https://platform-graphql.p.rapidapi.com').post('/').reply(200, {
-        apiId: 'testId',
-        trackingId: 'testTrackingId',
-        warnings: [],
-    })
+    nock('https://platform-graphql.p.rapidapi.com')
+        .post('/')
+        .reply(200, {
+            data: {
+                createApisFromRapidOas: [
+                    {
+                        apiId: 'testId',
+                        trackingId: 'testTrackingId',
+                        warnings: [],
+                    },
+                ],
+            },
+        })
     expect(await create_new_listing('/home/someuser/test_spec.json')).toEqual(
         res
     )
