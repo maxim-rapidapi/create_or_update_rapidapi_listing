@@ -5,5 +5,9 @@ module.exports = {
     roots: ['<rootDir>'],
     testEnvironment: 'node',
     testMatch: ['<rootDir>/tests/*.test.js'],
-    silent: true
-}
+    silent: true,
+    collectCoverageFrom: [
+          "bin/*.js",
+          "!bin/errors.js"
+      ]
+  }
