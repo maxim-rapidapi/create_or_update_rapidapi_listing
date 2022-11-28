@@ -47,9 +47,8 @@ async function create_new_listing(spec_path) {
 
     try {
         const res = await axios.request(options)
-        console.log(res.data.data.createApisFromRapidOas[0])
         if (res.status == 200) {
-            return res.data.apiId
+            return res.data.data.createApisFromRapidOas[0].apiId
         } else {
             throw new UnexpectedStatusError(
                 `HTTP status is not 201, but ${res.status}`
