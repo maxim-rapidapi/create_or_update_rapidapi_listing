@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "bin": {
-    "create_or_update_rapidapi": "./bin/index.js"
+    "create_or_update_rapidapi": "./main/index.js"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
