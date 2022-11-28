@@ -20,7 +20,7 @@ function form_graphql_headers() {
 function graphql_headers() {
     let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
     let x_rapidapi_identity_key = core.getInput('X_RAPIDAPI_IDENTITY_KEY', {
-        required: true,
+        required: false,
     })
     let x_rapidapi_graphql_host = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
         required: true,
