@@ -52,15 +52,22 @@ async function main() {
             )
             console.log('New version id: ' + new_version_id)
             await update_api_version(spec_path, new_version_id)
+            core.setOutput('api_id', api_id)
+            core.setOutput('api_version_name', parsed_spec_version)
+            core.setOutput('api_version_id', new_version_id)
         } else {
             console.warn('Spec was not newer, not creating new version.')
         }
+        core.setOutput('api_id', api_id)
     } else {
         console.log('This is a new API')
         const new_api = await create_new_listing(spec_path)
         const initial_version = await get_current_api_version(new_api, client)
         console.log('New api id: ' + new_api)
         console.log('Initial version id: ' + initial_version.id)
+        core.setOutput('api_id', new_api)
+        core.setOutput('api_version_name', initial_version.name)
+        core.setOutput('api_version_id', initial_version.id)
     }
 }
 
