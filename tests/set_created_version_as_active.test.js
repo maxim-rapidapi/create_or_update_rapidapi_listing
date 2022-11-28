@@ -1,6 +1,6 @@
 const {
     set_created_version_as_active,
-} = require('../bin/set_created_version_as_active')
+} = require('../main/set_created_version_as_active')
 const graphql = require('graphql-request')
 const nock = require('nock')
 

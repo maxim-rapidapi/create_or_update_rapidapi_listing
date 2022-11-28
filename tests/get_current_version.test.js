@@ -1,4 +1,4 @@
-const { get_current_version } = require('../bin/get_current_version')
+const { get_current_version } = require('../main/get_current_version')
 
 const version_list = [
     {

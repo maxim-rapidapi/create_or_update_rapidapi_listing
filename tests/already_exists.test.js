@@ -1,4 +1,4 @@
-const { already_exists } = require('../bin/already_exists')
+const { already_exists } = require('../main/already_exists')
 const graphql = require('graphql-request')
 
 afterEach(() => {
