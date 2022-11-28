@@ -47,6 +47,7 @@ async function create_new_listing(spec_path) {
 
     try {
         const res = await axios.request(options)
+        console.log(res)
         if (res.status == 200) {
             return res.data.apiId
         } else {
