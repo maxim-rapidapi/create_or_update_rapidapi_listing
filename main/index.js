@@ -60,7 +60,7 @@ async function main() {
         const new_api = await create_new_listing(spec_path)
         const initial_version = await get_current_api_version(new_api, client)
         console.log('New api id: ' + new_api)
-        console.log('Initial version id: ' + initial_version)
+        console.log('Initial version id: ' + initial_version.name)
     }
 }
 
