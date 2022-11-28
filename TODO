@@ -1,5 +1,6 @@
 [ ] cleanup index.js
 [ ] more tests
 [ ] better error handling
-[ ] 
+[ ] rethink how x-rapidapi-identity-key should be handled
+[ ] more tests :)
 

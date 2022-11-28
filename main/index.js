@@ -13,7 +13,6 @@ const { create_api_version } = require('./create_api_version')
 const { update_api_version } = require('./update_api_version')
 
 const graphql = require('graphql-request')
-const util = require('util')
 const semver = require('semver')
 
 async function main() {
