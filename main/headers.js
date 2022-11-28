@@ -34,16 +34,4 @@ function graphql_headers() {
     }
 }
 
-function rest_headers() {
-    let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
-    let x_rapidapi_rest_host = core.getInput('X_RAPIDAPI_REST_HOST', {
-        required: true,
-    })
-
-    return {
-        'x-rapidapi-key': x_rapidapi_key,
-        'x-rapidapi-host': x_rapidapi_rest_host,
-    }
-}
-
-module.exports = { form_graphql_headers, graphql_headers, rest_headers }
+module.exports = { form_graphql_headers, graphql_headers }

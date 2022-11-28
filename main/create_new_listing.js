@@ -7,8 +7,7 @@ const { form_graphql_headers } = require('./headers')
 
 /**
  * Creates a new API listing on the RapidAPI (Enterprise) Hub
- * This has to be based on the REST PAPI until the GraphQL PAPI parses
- * metadata
+ *
  * @param {string} filename Filename of the OAS to be uploaded
  * @return {string} The id of the newly created API
  */
