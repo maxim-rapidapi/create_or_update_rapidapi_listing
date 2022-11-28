@@ -32,4 +32,4 @@ outputs:
     description: "The id of the newly created API version"
 runs:
   using: "node16"
-  main: 'index.js'
+  main: main/index.js
