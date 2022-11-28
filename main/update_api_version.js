@@ -13,7 +13,7 @@ const { SpecParsingError } = require('./errors')
  * @returns {string} The id of the newly created API version
  */
 async function update_api_version(spec_path, api_version_id) {
-    const graphql_url = core.getInput('graphql_url', { required: true })
+    const graphql_url = core.getInput('GRAPHQL_URL', { required: true })
     const query = `
         mutation updateApisFromRapidOas($updates: [ApiUpdateFromRapidOasInput!]!) {
         updateApisFromRapidOas(updates: $updates) {

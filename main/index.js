@@ -17,8 +17,8 @@ const util = require('util')
 const semver = require('semver')
 
 async function main() {
-    const spec_path = core.getInput('spec_path', { required: true })
-    const graphql_url = core.getInput('graphql_url', { required: true })
+    const spec_path = core.getInput('SPEC_PATH', { required: true })
+    const graphql_url = core.getInput('GRAPHQL_URL', { required: true })
 
     const client = new graphql.GraphQLClient(graphql_url, {
         headers: graphql_headers(),
