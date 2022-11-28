@@ -1,11 +1,11 @@
 const core = require('@actions/core')
 
 function form_graphql_headers() {
-    let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
-    let x_rapidapi_identity_key = core.getInput('X_RAPIDAPI_IDENTITY_KEY', {
+    let x_rapidapi_key = core.getInput('x_rapidapi_key', { required: true })
+    let x_rapidapi_identity_key = core.getInput('x_rapidapi_identity_key', {
         required: true,
     })
-    let x_rapidapi_graphql_host = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
+    let x_rapidapi_graphql_host = core.getInput('x_rapidapi_graphql_host', {
         required: true,
     })
 
@@ -18,11 +18,11 @@ function form_graphql_headers() {
 }
 
 function graphql_headers() {
-    let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
-    let x_rapidapi_identity_key = core.getInput('X_RAPIDAPI_IDENTITY_KEY', {
+    let x_rapidapi_key = core.getInput('x_rapidapi_key', { required: true })
+    let x_rapidapi_identity_key = core.getInput('x_rapidapi_identity_key', {
         required: true,
     })
-    let x_rapidapi_graphql_host = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
+    let x_rapidapi_graphql_host = core.getInput('x_rapidapi_graphql_host', {
         required: true,
     })
 
@@ -35,8 +35,8 @@ function graphql_headers() {
 }
 
 function rest_headers() {
-    let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
-    let x_rapidapi_rest_host = core.getInput('X_RAPIDAPI_REST_HOST', {
+    let x_rapidapi_key = core.getInput('x_rapidapi_key', { required: true })
+    let x_rapidapi_rest_host = core.getInput('x_rapidapi_rest_host', {
         required: true,
     })
 
