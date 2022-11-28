@@ -47,7 +47,8 @@ async function create_new_listing(spec_path) {
 
     try {
         const res = await axios.request(options)
-        console.log(res.data)
+        console.log(res.data.data)
+        console.log(res.data.createApisFromRapidOas)
         if (res.status == 200) {
             return res.data.apiId
         } else {
