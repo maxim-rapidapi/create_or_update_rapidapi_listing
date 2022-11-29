@@ -9,3 +9,4 @@
 [ ] option to pass apiId and use that instead of searching for it
 [ ] option to rename the existing version if we update that (instead of creating a new one) -> probably cannot be done
 [ ] pass existing apiVersionId to work on as well as apiId
+[ ] rename graphql env vars now we now longer using the rest papi
