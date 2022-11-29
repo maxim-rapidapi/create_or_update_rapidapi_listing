@@ -7,7 +7,7 @@ module.exports = {
     testMatch: ['<rootDir>/tests/*.test.js'],
     silent: true,
     collectCoverageFrom: [
-          "bin/*.js",
-          "!bin/errors.js"
+          "main/*.js",
+          "!main/errors.js"
       ]
   }
