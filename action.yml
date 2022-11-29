@@ -26,4 +26,4 @@ outputs:
     description: "The id of the newly created API version"
 runs:
   using: "node16"
-  main: main/index.js
+  main: dist/index.js
