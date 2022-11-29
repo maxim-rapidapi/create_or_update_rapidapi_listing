@@ -316,9 +316,6 @@ const core = __nccwpck_require__(2186)
 
 function form_graphql_headers() {
     let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
-    let x_rapidapi_identity_key = core.getInput('X_RAPIDAPI_IDENTITY_KEY', {
-        required: true,
-    })
     let x_rapidapi_graphql_host = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
         required: true,
     })
@@ -326,16 +323,12 @@ function form_graphql_headers() {
     return {
         'content-type': 'multipart/form-data',
         'x-rapidapi-key': x_rapidapi_key,
-        'x-rapidapi-identity-key': x_rapidapi_identity_key,
         'x-rapidapi-host': x_rapidapi_graphql_host,
     }
 }
 
 function graphql_headers() {
     let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
-    let x_rapidapi_identity_key = core.getInput('X_RAPIDAPI_IDENTITY_KEY', {
-        required: false,
-    })
     let x_rapidapi_graphql_host = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
         required: true,
     })
@@ -343,7 +336,6 @@ function graphql_headers() {
     return {
         'content-type': 'application/json',
         'x-rapidapi-key': x_rapidapi_key,
-        'x-rapidapi-identity-key': x_rapidapi_identity_key,
         'x-rapidapi-host': x_rapidapi_graphql_host,
     }
 }
@@ -5761,13 +5753,13 @@ module.exports = setup;
 if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
 	module.exports = __nccwpck_require__(8222);
 } else {
-	module.exports = __nccwpck_require__(4874);
+	module.exports = __nccwpck_require__(5332);
 }
 
 
 /***/ }),
 
-/***/ 4874:
+/***/ 5332:
 /***/ ((module, exports, __nccwpck_require__) => {
 
 /**
@@ -17478,7 +17470,7 @@ var _v3 = _interopRequireDefault(__nccwpck_require__(5122));
 
 var _v4 = _interopRequireDefault(__nccwpck_require__(9120));
 
-var _nil = _interopRequireDefault(__nccwpck_require__(5332));
+var _nil = _interopRequireDefault(__nccwpck_require__(5350));
 
 var _version = _interopRequireDefault(__nccwpck_require__(1595));
 
@@ -17522,7 +17514,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 5332:
+/***/ 5350:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -24439,16 +24431,16 @@ var __webpack_exports__ = {};
 
 (__nccwpck_require__(2437).config)()
 
-const core = __nccwpck_require__(2186)
-const { read_spec } = __nccwpck_require__(2899)
 const { already_exists } = __nccwpck_require__(1313)
 const { api_version_from_spec, api_name_from_spec } = __nccwpck_require__(6687)
+const { create_api_version } = __nccwpck_require__(3432)
+const { create_new_listing } = __nccwpck_require__(8968)
 const { get_current_api_version } = __nccwpck_require__(801)
 const { graphql_headers } = __nccwpck_require__(7473)
-const { create_new_listing } = __nccwpck_require__(8968)
-const { create_api_version } = __nccwpck_require__(3432)
+const { read_spec } = __nccwpck_require__(2899)
 const { update_api_version } = __nccwpck_require__(2338)
 
+const core = __nccwpck_require__(2186)
 const graphql = __nccwpck_require__(2476)
 const semver = __nccwpck_require__(1383)
 
@@ -24456,6 +24448,8 @@ async function main() {
     const spec_path = core.getInput('SPEC_PATH', { required: true })
     const graphql_url = core.getInput('GRAPHQL_URL', { required: true })
 
+    // We're making two to three API calls to the GraphQL PAPI with the same headers, so
+    // let's re-use a single client object
     const client = new graphql.GraphQLClient(graphql_url, {
         headers: graphql_headers(),
     })
@@ -24465,13 +24459,13 @@ async function main() {
     const api_id = await already_exists(name, client)
     if (api_id != null) {
         // Provide some data about the API
-        console.log('This is an existing API')
-        console.log('The API is: ' + api_id)
         const current_version = await get_current_api_version(api_id, client)
         const parsed_current_version = current_version.name
         const parsed_spec_version = api_version_from_spec(spec)
-        console.log('Version in spec: ' + parsed_spec_version)
-        console.log('Version on Hub: ' + parsed_current_version)
+        console.log('=> This is an existing API')
+        console.log('  The API id is:   ' + api_id)
+        console.log('  Version on Hub:  ' + parsed_current_version)
+        console.log('  Version in spec: ' + parsed_spec_version)
 
         // Only create a new API version if the provided spec's version is higher than
         // the version already on the Hub
@@ -24479,28 +24473,36 @@ async function main() {
             parsed_spec_version,
             parsed_current_version
         )
-        console.log('Uploaded spec is newer: ' + spec_is_newer)
+        console.log('=> Uploaded spec is newer: ' + spec_is_newer)
+
         if (spec_is_newer) {
+            console.log('   Creating new API version in Hub...')
             const new_version_id = await create_api_version(
                 parsed_spec_version,
                 api_id,
                 client
             )
-            console.log('New version id: ' + new_version_id)
+            console.log('   => New version id: ' + new_version_id)
             await update_api_version(spec_path, new_version_id)
+            console.log('   Successfully uploaded new API version into the Hub!')
+
+            // Set output variables for re-use in later actions, if need be
             core.setOutput('api_id', api_id)
             core.setOutput('api_version_name', parsed_spec_version)
             core.setOutput('api_version_id', new_version_id)
         } else {
-            console.warn('Spec was not newer, not creating new version.')
+            console.warn('   Spec version was not newer than version on Hub...')
+            console.warn('   Not creating new version.')
         }
         core.setOutput('api_id', api_id)
     } else {
-        console.log('This is a new API')
         const new_api = await create_new_listing(spec_path)
         const initial_version = await get_current_api_version(new_api, client)
-        console.log('New api id: ' + new_api)
-        console.log('Initial version id: ' + initial_version.id)
+        console.log('=> This is a new API')
+        console.log('   New api id: ' + new_api)
+        console.log('   Initial version id: ' + initial_version.id)
+        
+        // Set output variables for re-use in later actions, if need be
         core.setOutput('api_id', new_api)
         core.setOutput('api_version_name', initial_version.name)
         core.setOutput('api_version_id', initial_version.id)
