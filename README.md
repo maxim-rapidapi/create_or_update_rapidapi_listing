@@ -78,6 +78,6 @@ steps:
 
 ### Limitations
 
--   You can only use the GraphQL PAPI with APIs you own, either through personal or team credentials.
+-   You can only use this Action with APIs you own, either through personal or team credentials.
 -   There is no support for `on-behalf-of` or `x-rapidapi-identity-key` yet.
 -   The name of the API you manage with this Action needs to be unique across all APIs you have access to.
