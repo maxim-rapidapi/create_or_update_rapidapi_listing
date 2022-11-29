@@ -1,4 +1,4 @@
-[ ] cleanup index.js
+[x] cleanup index.js
 [ ] more tests
 [ ] better error handling
 [ ] re-introduce x-rapidapi-identity-key in a more sane way (tbd)
