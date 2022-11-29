@@ -4,7 +4,8 @@
   "description": "GitHub Action to create or update an API on RapidAPI",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "pack": "node node_modules/.bin/ncc build main/index.js -o dist"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,8 @@
     "semver": "^7.3.8"
   },
   "devDependencies": {
+    "@vercel/ncc": "^0.34.0",
+    "install": "^0.13.0",
     "jest": "^29.2.1",
     "mock-fs": "^5.1.4",
     "nock": "^13.2.9"
