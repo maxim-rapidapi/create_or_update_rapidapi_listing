@@ -15,7 +15,7 @@ const graphql = __nccwpck_require__(2476)
  * @param {object} client The GraphQL Client object for reuse
  * @return {string} The id of the existing API
  */
-async function already_exists(name, client) {
+async function already_exists(name, owner_id, client) {
     const query = graphql.gql`
     query api($where: ApiWhereInput) {
         apis(where: $where) {
@@ -29,6 +29,7 @@ async function already_exists(name, client) {
     const variables = {
         where: {
             name: name,
+            ownerId: owner_id,
         },
     }
 
@@ -24447,6 +24448,7 @@ const semver = __nccwpck_require__(1383)
 async function main() {
     const spec_path = core.getInput('SPEC_PATH', { required: true })
     const graphql_url = core.getInput('GRAPHQL_URL', { required: true })
+    const owner_id = core.getInput('OWNER_ID', { required: true })
 
     // We're making two to three API calls to the GraphQL PAPI with the same headers, so
     // let's re-use a single client object
@@ -24456,7 +24458,7 @@ async function main() {
 
     const spec = read_spec(spec_path)
     const name = api_name_from_spec(spec)
-    const api_id = await already_exists(name, client)
+    const api_id = await already_exists(name, owner_id, client)
     if (api_id != null) {
         // Provide some data about the API
         const current_version = await get_current_api_version(api_id, client)
