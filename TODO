@@ -1,7 +1,7 @@
 [ ] cleanup index.js
 [ ] more tests
 [ ] better error handling
-[ ] rethink how x-rapidapi-identity-key should be handled
+[ ] re-introduce x-rapidapi-identity-key in a more sane way (tbd)
 [ ] more tests :)
 [ ] use ownerid and api name for finding the "original" api
 [ ] option to set new version as current
