@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Install deps
-      run: rpm install
+      run: npm install
     - uses: tool3/ncc@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
