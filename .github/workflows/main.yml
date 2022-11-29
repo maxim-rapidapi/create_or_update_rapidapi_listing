@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - ncc
       
 jobs:
   test:
@@ -16,4 +17,16 @@ jobs:
         id: install
       - name: Run jest
         run: npm test
-
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: tool3/ncc@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        src: main/index.js
+        branch: ncc
+    - uses: actions/upload-artifact@v1
+      with:
+        name: dist
+        path: dist/
