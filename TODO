@@ -3,4 +3,9 @@
 [ ] better error handling
 [ ] rethink how x-rapidapi-identity-key should be handled
 [ ] more tests :)
-
+[ ] use ownerid and api name for finding the "original" api
+[ ] option to set new version as current
+[ ] option to always update the latest, already existing version
+[ ] option to pass apiId and use that instead of searching for it
+[ ] option to rename the existing version if we update that (instead of creating a new one) -> probably cannot be done
+[ ] pass existing apiVersionId to work on as well as apiId
