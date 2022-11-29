@@ -19,6 +19,7 @@ jobs:
         run: npm test
           
   build:
+    name: Build and push dist/index.js
     needs: test
     env:
       PACKED_JS_PATH: 'dist/index.js'
