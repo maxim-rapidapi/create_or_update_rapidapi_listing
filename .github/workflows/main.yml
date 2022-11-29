@@ -29,7 +29,7 @@ jobs:
       - name: Extract branch name
         id: extractBranch
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -40,10 +40,10 @@ jobs:
         run: npm run pack
       - name: Check packed js changes
         id: packedJsStatus
-        run: echo ::set-output name=changes::$(git status ${{ env.PACKED_JS_PATH }} --porcelain)
+        run: echo "CHANGES=$(git status ${{env.PACKED_JS_PATH}} --porcelain)" >> $GITHUB_OUTPUT
       - name: Commit packed js
         id: commitPackedJs
-        if: steps.packedJsStatus.outputs.changes
+        if: steps.packedJsStatus.outputs.CHANGES
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -56,4 +56,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tags: true
           force: true
-          branch: ${{ steps.extractBranch.outputs.branch }}
+          branch: ${{ steps.extractBranch.outputs.BRANCH }}
