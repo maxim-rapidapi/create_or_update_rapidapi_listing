@@ -2,6 +2,9 @@ name: "Create or update API listing on RapidAPI Hub"
 description: "Use this action to create a new API listing on RapidAPI or update an existing one"
 author: "Maxim Burgerhout"
 inputs:
+  owner_id:
+    description: "The ID of the team or user that (will) own(s) the API"
+    required: true
   x_rapidapi_key:
     description: "The value for the x-rapidapi-key header"
     required: true

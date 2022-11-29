@@ -8,7 +8,7 @@ const graphql = require('graphql-request')
  * @param {object} client The GraphQL Client object for reuse
  * @return {string} The id of the existing API
  */
-async function already_exists(name, client) {
+async function already_exists(name, owner_id, client) {
     const query = graphql.gql`
     query api($where: ApiWhereInput) {
         apis(where: $where) {
@@ -22,6 +22,7 @@ async function already_exists(name, client) {
     const variables = {
         where: {
             name: name,
+            ownerId: owner_id,
         },
     }
 

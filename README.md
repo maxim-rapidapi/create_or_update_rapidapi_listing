@@ -43,6 +43,7 @@ jobs:
 | Input                     | Description                                                                                                                        | Required |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | -------- |
 | `spec_path`               | Path to the OpenAPI spec file in JSON format                                                                                       | True     |
+| `owner_id`                | Id of the team / user owning the existing API, or team / user to own the new API | True |
 | `x_rapidapi_key`          | API key for the user / the team that will own this API on the Hub                                                                  | True     |
 | `x_rapidapi_graphql_host` | GraphQL platform API host for the user / the team that will own this API on the Hub (e.g. `graphql-platform.yourhub.rapidapi.com`) | True     |
 | `graphql_url`             | The URL to the GraphQL Platform API, defaults to `https://graphql-platform.p.rapidapi.com/` (mind the slash!)                      | True     |
@@ -80,4 +81,3 @@ steps:
 
 -   You can only use this Action with APIs you own, either through personal or team credentials.
 -   There is no support for `on-behalf-of` or `x-rapidapi-identity-key` yet.
--   The name of the API you manage with this Action needs to be unique across all APIs you have access to.

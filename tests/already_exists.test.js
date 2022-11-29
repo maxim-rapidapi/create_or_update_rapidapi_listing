@@ -22,14 +22,14 @@ test('test graphql papi already_exists query contents', async () => {
     const mockClient = jest
         .spyOn(c, 'request')
         .mockImplementation((query, variables) => JSON.parse(return_data_one))
-    const res = await already_exists('My API', c)
+    const res = await already_exists('My API', 'my_user_id', c)
     expect(res).toEqual(return_id_one)
 })
 
 const result = [
     [
         '\n    query api($where: ApiWhereInput) {\n        apis(where: $where) {\n          nodes {\n            id\n            name\n          }\n        }\n      }',
-        { where: { name: 'My API' } },
+        { where: { name: 'My API', ownerId: 'my_user_id',} },
     ],
 ]
 
@@ -38,6 +38,6 @@ test('test graphql papi query formatting', async () => {
     const mockClient = jest
         .spyOn(c, 'request')
         .mockImplementation((query, variables) => JSON.parse(return_data_one))
-    const response = await already_exists('My API', c)
+    const response = await already_exists('My API', 'my_user_id', c)
     expect(mockClient.mock.calls).toEqual(result)
 })
