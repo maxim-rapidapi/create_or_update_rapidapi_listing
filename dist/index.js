@@ -15,8 +15,8 @@ const graphql = __nccwpck_require__(2476)
  * @param {object} client The GraphQL Client object for reuse
  * @return {string} The id of the existing API
  */
-async function already_exists(name, owner_id, client) {
-    const query = graphql.gql`
+async function alreadyExists (name, ownerId, client) {
+  const query = graphql.gql`
     query api($where: ApiWhereInput) {
         apis(where: $where) {
           nodes {
@@ -26,24 +26,24 @@ async function already_exists(name, owner_id, client) {
         }
       }`
 
-    const variables = {
-        where: {
-            name: name,
-            ownerId: owner_id,
-        },
+  const variables = {
+    where: {
+      name,
+      ownerId
     }
+  }
 
-    const data = await client.request(query, variables)
-    if (data.apis.nodes.length == 0) {
-        return null
-    } else if (data.apis.nodes.length == 1) {
-        return data.apis.nodes[0].id
-    } else {
-        throw `More than one API found with name ${name}; that shouldn't happen.`
-    }
+  const data = await client.request(query, variables)
+  if (data.apis.nodes.length === 0) {
+    return null
+  } else if (data.apis.nodes.length === 1) {
+    return data.apis.nodes[0].id
+  } else {
+    throw new Error(`More than one API found with name ${name}; that shouldn't happen.`)
+  }
 }
 
-module.exports = { already_exists }
+module.exports = { alreadyExists }
 
 
 /***/ }),
@@ -52,7 +52,6 @@ module.exports = { already_exists }
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const graphql = __nccwpck_require__(2476)
-const util = __nccwpck_require__(3837)
 const { UnexpectedResponseError } = __nccwpck_require__(9433)
 
 /**
@@ -62,37 +61,37 @@ const { UnexpectedResponseError } = __nccwpck_require__(9433)
  * @param {object} client The GraphQL Client object for reuse
  * @returns {string} The id of the newly created API version
  */
-async function create_api_version(version_name, api_id, client) {
-    const mutation = graphql.gql`
+async function createApiVersion (name, api, client) {
+  const mutation = graphql.gql`
     mutation createApiVersions($apiVersions: [ApiVersionCreateInput!]!) {
         createApiVersions(apiVersions: $apiVersions) {
             id
         }
     }`
 
-    const params = {
-        apiVersions: {
-            api: api_id,
-            name: version_name,
-        },
+  const params = {
+    apiVersions: {
+      api,
+      name
     }
+  }
 
-    try {
-        const res = await client.request(mutation, params)
-        if (res.errors != undefined) {
-            throw new UnexpectedResponseError(
+  try {
+    const res = await client.request(mutation, params)
+    if (res.errors !== undefined) {
+      throw new UnexpectedResponseError(
                 `Unable to create new API version: ${res.errors[0].message}`
-            )
-        } else {
-            return res.createApiVersions[0].id
-        }
-    } catch (err) {
-        console.log(err)
-        throw 'Unknown error in create_api_version'
+      )
+    } else {
+      return res.createApiVersions[0].id
     }
+  } catch (err) {
+    console.log(err)
+    throw new Error('Unknown error in create_api_version')
+  }
 }
 
-module.exports = { create_api_version }
+module.exports = { createApiVersion }
 
 
 /***/ }),
@@ -105,7 +104,7 @@ const FormData = __nccwpck_require__(4334)
 const fs = __nccwpck_require__(7147)
 const core = __nccwpck_require__(2186)
 const { PlatformAPIError, UnexpectedStatusError } = __nccwpck_require__(9433)
-const { form_graphql_headers } = __nccwpck_require__(7473)
+const { formGraphqlHeaders } = __nccwpck_require__(7473)
 
 /**
  * Creates a new API listing on the RapidAPI (Enterprise) Hub
@@ -113,10 +112,10 @@ const { form_graphql_headers } = __nccwpck_require__(7473)
  * @param {string} filename Filename of the OAS to be uploaded
  * @return {string} The id of the newly created API
  */
-async function create_new_listing(spec_path) {
-    const graphql_url = core.getInput('GRAPHQL_URL', { required: true })
+async function createNewListing (specPath) {
+  const graphqlUrl = core.getInput('GRAPHQL_URL', { required: true })
 
-    const query = `
+  const query = `
     mutation createApisFromRapidOas($creations: [ApiCreateFromRapidOasInput!]!) {
         createApisFromRapidOas(creations: $creations) {
         apiId
@@ -124,44 +123,44 @@ async function create_new_listing(spec_path) {
         }
     }`
 
-    const variables = {
-        creations: {
-            spec: null,
-        },
+  const variables = {
+    creations: {
+      spec: null
     }
+  }
 
-    let creations_file = fs.readFileSync(spec_path)
+  const creationsFile = fs.readFileSync(specPath)
 
-    let fd = new FormData()
-    fd.append('operations', JSON.stringify({ query, variables }))
-    fd.append('map', '{"0":["variables.creations.spec"]}')
-    fd.append('0', creations_file, {
-        filename: 'spec.json',
-        contentType: 'application/json',
-    })
+  const fd = new FormData()
+  fd.append('operations', JSON.stringify({ query, variables }))
+  fd.append('map', '{"0":["variables.creations.spec"]}')
+  fd.append('0', creationsFile, {
+    filename: 'spec.json',
+    contentType: 'application/json'
+  })
 
-    let options = {
-        method: 'POST',
-        url: graphql_url,
-        headers: Object.assign(form_graphql_headers(), fd.getHeaders()),
-        data: fd,
-    }
+  const options = {
+    method: 'POST',
+    url: graphqlUrl,
+    headers: Object.assign(formGraphqlHeaders(), fd.getHeaders()),
+    data: fd
+  }
 
-    try {
-        const res = await axios.request(options)
-        if (res.status == 200) {
-            return res.data.data.createApisFromRapidOas[0].apiId
-        } else {
-            throw new UnexpectedStatusError(
+  try {
+    const res = await axios.request(options)
+    if (res.status === 200) {
+      return res.data.data.createApisFromRapidOas[0].apiId
+    } else {
+      throw new UnexpectedStatusError(
                 `HTTP status is not 201, but ${res.status}`
-            )
-        }
-    } catch (err) {
-        throw new PlatformAPIError(`Platform API error: ${err}`)
+      )
     }
+  } catch (err) {
+    throw new PlatformAPIError(`Platform API error: ${err}`)
+  }
 }
 
-module.exports = { create_new_listing }
+module.exports = { createNewListing }
 
 
 /***/ }),
@@ -170,54 +169,54 @@ module.exports = { create_new_listing }
 /***/ ((module) => {
 
 class InvalidCollectionError extends Error {
-    constructor(message) {
-        super(message)
-        this.name = this.constructor.name
-    }
+  constructor (message) {
+    super(message)
+    this.name = this.constructor.name
+  }
 }
 
 class NoCurrentVersionError extends Error {
-    constructor(message) {
-        super(message)
-        this.name = this.constructor.name
-    }
+  constructor (message) {
+    super(message)
+    this.name = this.constructor.name
+  }
 }
 
 class PlatformAPIError extends Error {
-    constructor(message) {
-        super(message)
-        this.name = this.constructor.name
-    }
+  constructor (message) {
+    super(message)
+    this.name = this.constructor.name
+  }
 }
 
 class SpecParsingError extends Error {
-    constructor(message) {
-        super(message)
-        this.name = this.constructor.name
-    }
+  constructor (message) {
+    super(message)
+    this.name = this.constructor.name
+  }
 }
 
 class UnexpectedResponseError extends Error {
-    constructor(message) {
-        super(message)
-        this.name = this.constructor.name
-    }
+  constructor (message) {
+    super(message)
+    this.name = this.constructor.name
+  }
 }
 
 class UnexpectedStatusError extends Error {
-    constructor(message) {
-        super(message)
-        this.name = this.constructor.name
-    }
+  constructor (message) {
+    super(message)
+    this.name = this.constructor.name
+  }
 }
 
 module.exports = {
-    InvalidCollectionError,
-    NoCurrentVersionError,
-    PlatformAPIError,
-    SpecParsingError,
-    UnexpectedResponseError,
-    UnexpectedStatusError,
+  InvalidCollectionError,
+  NoCurrentVersionError,
+  PlatformAPIError,
+  SpecParsingError,
+  UnexpectedResponseError,
+  UnexpectedStatusError
 }
 
 
@@ -227,7 +226,7 @@ module.exports = {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const graphql = __nccwpck_require__(2476)
-const { get_current_version } = __nccwpck_require__(7567)
+const { getCurrentVersion } = __nccwpck_require__(7567)
 const { NoCurrentVersionError } = __nccwpck_require__(9433)
 
 /**
@@ -236,8 +235,8 @@ const { NoCurrentVersionError } = __nccwpck_require__(9433)
  * @param {object} client The GraphQL Client object for reuse
  * @return {object} An object containing the name and id of the latest version of this API
  */
-async function get_current_api_version(api_id, client) {
-    const query = graphql.gql`
+async function getCurrentApiVersion (apiId, client) {
+  const query = graphql.gql`
     query apiVersions($where: ApiVersionWhereInput) {
         apiVersions(where: $where) {
           nodes {
@@ -248,27 +247,27 @@ async function get_current_api_version(api_id, client) {
         }
       }`
 
-    const variables = {
-        where: {
-            apiId: api_id,
-            versionStatus: 'ACTIVE',
-        },
+  const variables = {
+    where: {
+      apiId,
+      versionStatus: 'ACTIVE'
     }
+  }
 
-    try {
-        let res = await client.request(query, variables)
-        if (res.apiVersions.nodes.length > 0) {
-            return get_current_version(res.apiVersions.nodes)
-        } else {
-            throw new NoCurrentVersionError('No API versions found')
-        }
-    } catch (err) {
-        console.log(err)
-        throw 'Unknown error in get_current_api_version'
+  try {
+    const res = await client.request(query, variables)
+    if (res.apiVersions.nodes.length > 0) {
+      return getCurrentVersion(res.apiVersions.nodes)
+    } else {
+      throw new NoCurrentVersionError('No API versions found')
     }
+  } catch (err) {
+    console.log(err)
+    throw new Error('Unknown error in get_current_api_version')
+  }
 }
 
-module.exports = { get_current_api_version }
+module.exports = { getCurrentApiVersion }
 
 
 /***/ }),
@@ -277,6 +276,7 @@ module.exports = { get_current_api_version }
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const semverValid = __nccwpck_require__(9601)
+const { NoCurrentVersionError, SpecParsingError } = __nccwpck_require__(9433)
 
 /**
  * Select the version set as current from a list of api_versions <br/>
@@ -285,27 +285,27 @@ const semverValid = __nccwpck_require__(9601)
  * @param {array} versions List of version objects
  * @return {object} An object containing the name and id of the latest version of this API
  */
-function get_current_version(versions) {
-    const current = versions.find((element) => element.current == true)
-    if (current == undefined) {
-        throw new NoCurrentVersionError(
-            'No version is marked as current. That should be impossible!'
-        )
+function getCurrentVersion (versions) {
+  const current = versions.find((element) => element.current === true)
+  if (current === undefined) {
+    throw new NoCurrentVersionError(
+      'No version is marked as current. That should be impossible!'
+    )
+  } else {
+    if (semverValid(current.name) != null) {
+      return {
+        name: current.name,
+        id: current.id
+      }
     } else {
-        if (semverValid(current.name) != null) {
-            return {
-                name: current.name,
-                id: current.id,
-            }
-        } else {
-            throw new SpecParsingError(
+      throw new SpecParsingError(
                 `Not a valid version according to semver: ${current.name}`
-            )
-        }
+      )
     }
+  }
 }
 
-module.exports = { get_current_version }
+module.exports = { getCurrentVersion }
 
 
 /***/ }),
@@ -315,33 +315,33 @@ module.exports = { get_current_version }
 
 const core = __nccwpck_require__(2186)
 
-function form_graphql_headers() {
-    let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
-    let x_rapidapi_graphql_host = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
-        required: true,
-    })
+function formGraphqlHeaders () {
+  const xRapidapiKey = core.getInput('X_RAPIDAPI_KEY', { required: true })
+  const xRapidapiGraphqlHost = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
+    required: true
+  })
 
-    return {
-        'content-type': 'multipart/form-data',
-        'x-rapidapi-key': x_rapidapi_key,
-        'x-rapidapi-host': x_rapidapi_graphql_host,
-    }
+  return {
+    'content-type': 'multipart/form-data',
+    'x-rapidapi-key': xRapidapiKey,
+    'x-rapidapi-host': xRapidapiGraphqlHost
+  }
 }
 
-function graphql_headers() {
-    let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
-    let x_rapidapi_graphql_host = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
-        required: true,
-    })
+function graphqlHeaders () {
+  const xRapidapiKey = core.getInput('X_RAPIDAPI_KEY', { required: true })
+  const xRapidapiGraphqlHost = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
+    required: true
+  })
 
-    return {
-        'content-type': 'application/json',
-        'x-rapidapi-key': x_rapidapi_key,
-        'x-rapidapi-host': x_rapidapi_graphql_host,
-    }
+  return {
+    'content-type': 'application/json',
+    'x-rapidapi-key': xRapidapiKey,
+    'x-rapidapi-host': xRapidapiGraphqlHost
+  }
 }
 
-module.exports = { form_graphql_headers, graphql_headers }
+module.exports = { formGraphqlHeaders, graphqlHeaders }
 
 
 /***/ }),
@@ -357,18 +357,18 @@ const { SpecParsingError } = __nccwpck_require__(9433)
  * @param {string} spec The contents of a spec file
  * @returns {string} The contents of the version field in the info block
  */
-function api_version_from_spec(spec) {
-    if (spec.info.version == undefined) {
-        throw new SpecParsingError("No property 'version' in spec")
+function apiVersionFromSpec (spec) {
+  if (spec.info.version === undefined) {
+    throw new SpecParsingError("No property 'version' in spec")
+  } else {
+    if (semverValid(spec.info.version)) {
+      return spec.info.version
     } else {
-        if (semverValid(spec.info.version)) {
-            return spec.info.version
-        } else {
-            throw new SpecParsingError(
+      throw new SpecParsingError(
                 `Not a valid version according to semver: ${spec.info.version}`
-            )
-        }
+      )
     }
+  }
 }
 
 /**
@@ -376,12 +376,12 @@ function api_version_from_spec(spec) {
  * @param {string} spec The contents of a spec file
  * @returns {string} The contents of the title field in the info block
  */
-function api_name_from_spec(spec) {
-    if (spec.info.title == undefined) {
-        throw new SpecParsingError("No property 'title' in spec")
-    } else {
-        return spec.info.title
-    }
+function apiNameFromSpec (spec) {
+  if (spec.info.title === undefined) {
+    throw new SpecParsingError("No property 'title' in spec")
+  } else {
+    return spec.info.title
+  }
 }
 
 /**
@@ -389,18 +389,18 @@ function api_name_from_spec(spec) {
  * @param {string} spec The contents of a spec file
  * @returns {string} The contents of the description field in the info block
  */
-function api_description_from_spec(spec) {
-    if (spec.info.description == undefined) {
-        throw new SpecParsingError("No property 'description' in spec")
-    } else {
-        return spec.info.description
-    }
+function apiDescriptionFromSpec (spec) {
+  if (spec.info.description === undefined) {
+    throw new SpecParsingError("No property 'description' in spec")
+  } else {
+    return spec.info.description
+  }
 }
 
 module.exports = {
-    api_version_from_spec,
-    api_name_from_spec,
-    api_description_from_spec,
+  apiVersionFromSpec,
+  apiNameFromSpec,
+  apiDescriptionFromSpec
 }
 
 
@@ -416,21 +416,21 @@ const fs = __nccwpck_require__(7147)
  * @param {string} oas Path to OAS
  * @return {string} The contents of the OAS
  */
-function read_spec(oas) {
+function readSpec (oas) {
+  try {
+    const spec = fs.readFileSync(oas)
     try {
-        let spec = fs.readFileSync(oas)
-        try {
-            return JSON.parse(spec)
-        } catch (err) {
-            throw "Couldn't parse file: " + oas
-        }
+      return JSON.parse(spec)
     } catch (err) {
-        console.log(err)
-        throw 'Could not read file: ' + oas
+      throw new Error("Couldn't parse file: " + oas)
     }
+  } catch (err) {
+    console.log(err)
+    throw new Error('Could not read file: ' + oas)
+  }
 }
 
-module.exports = { read_spec }
+module.exports = { readSpec }
 
 
 /***/ }),
@@ -442,8 +442,8 @@ const axios = __nccwpck_require__(8757)
 const fs = __nccwpck_require__(7147)
 const FormData = __nccwpck_require__(4334)
 const core = __nccwpck_require__(2186)
-const { form_graphql_headers } = __nccwpck_require__(7473)
-const { SpecParsingError } = __nccwpck_require__(9433)
+const { formGraphqlHeaders } = __nccwpck_require__(7473)
+const { SpecParsingError, UnexpectedStatusError } = __nccwpck_require__(9433)
 
 /**
  * Creates and returns a new API version for a given API
@@ -452,60 +452,60 @@ const { SpecParsingError } = __nccwpck_require__(9433)
  * @param {object} client The GraphQL Client object for reuse
  * @returns {string} The id of the newly created API version
  */
-async function update_api_version(spec_path, api_version_id) {
-    const graphql_url = core.getInput('GRAPHQL_URL', { required: true })
-    const query = `
+async function updateApiVersion (specPath, apiVersionId) {
+  const graphqlUrl = core.getInput('GRAPHQL_URL', { required: true })
+  const query = `
         mutation updateApisFromRapidOas($updates: [ApiUpdateFromRapidOasInput!]!) {
         updateApisFromRapidOas(updates: $updates) {
             apiId
         }
     }`
 
-    const variables = {
-        updates: {
-            spec: null,
-            apiVersionId: api_version_id,
-        },
+  const variables = {
+    updates: {
+      spec: null,
+      apiVersionId
     }
+  }
 
-    let updates_file = fs.readFileSync(spec_path)
+  const updatesFile = fs.readFileSync(specPath)
 
-    let fd = new FormData()
-    fd.append('operations', JSON.stringify({ query, variables }))
-    fd.append('map', '{"0":["variables.updates.spec"]}')
-    fd.append('0', updates_file, {
-        filename: 'spec.json',
-        contentType: 'application/json',
-    })
+  const fd = new FormData()
+  fd.append('operations', JSON.stringify({ query, variables }))
+  fd.append('map', '{"0":["variables.updates.spec"]}')
+  fd.append('0', updatesFile, {
+    filename: 'spec.json',
+    contentType: 'application/json'
+  })
 
-    let options = {
-        method: 'POST',
-        url: graphql_url,
-        headers: Object.assign(form_graphql_headers(), fd.getHeaders()),
-        data: fd,
-    }
+  const options = {
+    method: 'POST',
+    url: graphqlUrl,
+    headers: Object.assign(formGraphqlHeaders(), fd.getHeaders()),
+    data: fd
+  }
 
-    let res = await axios.request(options)
-    if (res.status == 200 && !res.data.errors) {
-        return res.status
-    } else if (
-        res.status == 200 &&
+  const res = await axios.request(options)
+  if (res.status === 200 && !res.data.errors) {
+    return res.status
+  } else if (
+    res.status === 200 &&
         res.data.errors &&
-        typeof res.data.errors == 'object'
-    ) {
-        // this happens when an unknown collection is part of the spec; we get a 200, but
-        // also an unprocessable_entity error :/
-        error_message = []
-        res.data.errors.forEach((value) => error_message.push(value.message))
-        throw new SpecParsingError(`Error parsing spec: ${error_message}`)
-    } else {
-        throw new UnexpectedStatusError(
+        typeof res.data.errors === 'object'
+  ) {
+    // this happens when an unknown collection is part of the spec; we get a 200, but
+    // also an unprocessable_entity error :/
+    const errorMessage = []
+    res.data.errors.forEach((value) => errorMessage.push(value.message))
+    throw new SpecParsingError(`Error parsing spec: ${errorMessage}`)
+  } else {
+    throw new UnexpectedStatusError(
             `HTTP status is not 200, but ${res.status}`
-        )
-    }
+    )
+  }
 }
 
-module.exports = { update_api_version }
+module.exports = { updateApiVersion }
 
 
 /***/ }),
@@ -24432,83 +24432,83 @@ var __webpack_exports__ = {};
 
 (__nccwpck_require__(2437).config)()
 
-const { already_exists } = __nccwpck_require__(1313)
-const { api_version_from_spec, api_name_from_spec } = __nccwpck_require__(6687)
-const { create_api_version } = __nccwpck_require__(3432)
-const { create_new_listing } = __nccwpck_require__(8968)
-const { get_current_api_version } = __nccwpck_require__(801)
-const { graphql_headers } = __nccwpck_require__(7473)
-const { read_spec } = __nccwpck_require__(2899)
-const { update_api_version } = __nccwpck_require__(2338)
+const { alreadyExists } = __nccwpck_require__(1313)
+const { apiVersionFromSpec, apiNameFromSpec } = __nccwpck_require__(6687)
+const { createApiVersion } = __nccwpck_require__(3432)
+const { createNewListing } = __nccwpck_require__(8968)
+const { getCurrentApiVersion } = __nccwpck_require__(801)
+const { graphqlHeaders } = __nccwpck_require__(7473)
+const { readSpec } = __nccwpck_require__(2899)
+const { updateApiVersion } = __nccwpck_require__(2338)
 
 const core = __nccwpck_require__(2186)
 const graphql = __nccwpck_require__(2476)
 const semver = __nccwpck_require__(1383)
 
-async function main() {
-    const spec_path = core.getInput('SPEC_PATH', { required: true })
-    const graphql_url = core.getInput('GRAPHQL_URL', { required: true })
-    const owner_id = core.getInput('OWNER_ID', { required: true })
+async function main () {
+  const specPath = core.getInput('SPEC_PATH', { required: true })
+  const graphqlUrl = core.getInput('GRAPHQL_URL', { required: true })
+  const ownerId = core.getInput('OWNER_ID', { required: true })
 
-    // We're making two to three API calls to the GraphQL PAPI with the same headers, so
-    // let's re-use a single client object
-    const client = new graphql.GraphQLClient(graphql_url, {
-        headers: graphql_headers(),
-    })
+  // We're making two to three API calls to the GraphQL PAPI with the same headers, so
+  // let's re-use a single client object
+  const client = new graphql.GraphQLClient(graphqlUrl, {
+    headers: graphqlHeaders()
+  })
 
-    const spec = read_spec(spec_path)
-    const name = api_name_from_spec(spec)
-    const api_id = await already_exists(name, owner_id, client)
-    if (api_id != null) {
-        // Provide some data about the API
-        const current_version = await get_current_api_version(api_id, client)
-        const parsed_current_version = current_version.name
-        const parsed_spec_version = api_version_from_spec(spec)
-        console.log('=> This is an existing API')
-        console.log('  The API id is:   ' + api_id)
-        console.log('  Version on Hub:  ' + parsed_current_version)
-        console.log('  Version in spec: ' + parsed_spec_version)
+  const spec = readSpec(specPath)
+  const name = apiNameFromSpec(spec)
+  const apiId = await alreadyExists(name, ownerId, client)
+  if (apiId != null) {
+    // Provide some data about the API
+    const currentVersion = await getCurrentApiVersion(apiId, client)
+    const parsedCurrentVersion = currentVersion.name
+    const parsedSpecVersion = apiVersionFromSpec(spec)
+    console.log('=> This is an existing API')
+    console.log('  The API id is:   ' + apiId)
+    console.log('  Version on Hub:  ' + parsedCurrentVersion)
+    console.log('  Version in spec: ' + parsedSpecVersion)
 
-        // Only create a new API version if the provided spec's version is higher than
-        // the version already on the Hub
-        const spec_is_newer = semver.gt(
-            parsed_spec_version,
-            parsed_current_version
-        )
-        console.log('=> Uploaded spec is newer: ' + spec_is_newer)
+    // Only create a new API version if the provided spec's version is higher than
+    // the version already on the Hub
+    const specIsNewer = semver.gt(
+      parsedSpecVersion,
+      parsedCurrentVersion
+    )
+    console.log('=> Uploaded spec is newer: ' + specIsNewer)
 
-        if (spec_is_newer) {
-            console.log('   Creating new API version in Hub...')
-            const new_version_id = await create_api_version(
-                parsed_spec_version,
-                api_id,
-                client
-            )
-            console.log('   => New version id: ' + new_version_id)
-            await update_api_version(spec_path, new_version_id)
-            console.log('   Successfully uploaded new API version into the Hub!')
+    if (specIsNewer) {
+      console.log('   Creating new API version in Hub...')
+      const newVersionId = await createApiVersion(
+        parsedSpecVersion,
+        apiId,
+        client
+      )
+      console.log('   => New version id: ' + newVersionId)
+      await updateApiVersion(specPath, newVersionId)
+      console.log('   Successfully uploaded new API version into the Hub!')
 
-            // Set output variables for re-use in later actions, if need be
-            core.setOutput('api_id', api_id)
-            core.setOutput('api_version_name', parsed_spec_version)
-            core.setOutput('api_version_id', new_version_id)
-        } else {
-            console.warn('   Spec version was not newer than version on Hub...')
-            console.warn('   Not creating new version.')
-        }
-        core.setOutput('api_id', api_id)
+      // Set output variables for re-use in later actions, if need be
+      core.setOutput('api_id', apiId)
+      core.setOutput('api_version_name', parsedSpecVersion)
+      core.setOutput('api_version_id', newVersionId)
     } else {
-        const new_api = await create_new_listing(spec_path)
-        const initial_version = await get_current_api_version(new_api, client)
-        console.log('=> This is a new API')
-        console.log('   New api id: ' + new_api)
-        console.log('   Initial version id: ' + initial_version.id)
-        
-        // Set output variables for re-use in later actions, if need be
-        core.setOutput('api_id', new_api)
-        core.setOutput('api_version_name', initial_version.name)
-        core.setOutput('api_version_id', initial_version.id)
+      console.warn('   Spec version was not newer than version on Hub...')
+      console.warn('   Not creating new version.')
     }
+    core.setOutput('api_id', apiId)
+  } else {
+    const newApi = await createNewListing(specPath)
+    const initialVersion = await getCurrentApiVersion(newApi, client)
+    console.log('=> This is a new API')
+    console.log('   New api id: ' + newApi)
+    console.log('   Initial version id: ' + initialVersion.id)
+
+    // Set output variables for re-use in later actions, if need be
+    core.setOutput('api_id', newApi)
+    core.setOutput('api_version_name', initialVersion.name)
+    core.setOutput('api_version_id', initialVersion.id)
+  }
 }
 
 main().catch((error) => console.error(error))
