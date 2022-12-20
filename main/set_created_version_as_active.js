@@ -6,8 +6,8 @@ const { PlatformAPIError } = require('./errors')
  * @param {string} api_version_id
  * @param {object} client The GraphQL Client object for reuse
  */
-async function set_created_version_as_active(api_version_id, client) {
-    const mutation = graphql.gql`
+async function setCreatedVersionAsActive (apiVersionId, client) {
+  const mutation = graphql.gql`
         mutation updateApiVersions($apiVersions: [ApiVersionUpdateInput!]!) {
           updateApiVersions(apiVersions: $apiVersions) {
             id
@@ -15,21 +15,21 @@ async function set_created_version_as_active(api_version_id, client) {
         }
     `
 
-    const variables = {
-        apiVersions: [
-            {
-                apiVersionId: api_version_id,
-                current: true,
-                versionStatus: 'active',
-            },
-        ],
-    }
+  const variables = {
+    apiVersions: [
+      {
+        apiVersionId,
+        current: true,
+        versionStatus: 'active'
+      }
+    ]
+  }
 
-    try {
-        await client.request(mutation, variables)
-    } catch (err) {
-        throw new PlatformAPIError(`Platform API error: ${err}`)
-    }
+  try {
+    await client.request(mutation, variables)
+  } catch (err) {
+    throw new PlatformAPIError(`Platform API error: ${err}`)
+  }
 }
 
-module.exports = { set_created_version_as_active }
+module.exports = { setCreatedVersionAsActive }

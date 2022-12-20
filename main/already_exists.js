@@ -8,8 +8,8 @@ const graphql = require('graphql-request')
  * @param {object} client The GraphQL Client object for reuse
  * @return {string} The id of the existing API
  */
-async function already_exists(name, owner_id, client) {
-    const query = graphql.gql`
+async function alreadyExists (name, ownerId, client) {
+  const query = graphql.gql`
     query api($where: ApiWhereInput) {
         apis(where: $where) {
           nodes {
@@ -19,21 +19,21 @@ async function already_exists(name, owner_id, client) {
         }
       }`
 
-    const variables = {
-        where: {
-            name: name,
-            ownerId: owner_id,
-        },
+  const variables = {
+    where: {
+      name,
+      ownerId
     }
+  }
 
-    const data = await client.request(query, variables)
-    if (data.apis.nodes.length == 0) {
-        return null
-    } else if (data.apis.nodes.length == 1) {
-        return data.apis.nodes[0].id
-    } else {
-        throw `More than one API found with name ${name}; that shouldn't happen.`
-    }
+  const data = await client.request(query, variables)
+  if (data.apis.nodes.length === 0) {
+    return null
+  } else if (data.apis.nodes.length === 1) {
+    return data.apis.nodes[0].id
+  } else {
+    throw new Error(`More than one API found with name ${name}; that shouldn't happen.`)
+  }
 }
 
-module.exports = { already_exists }
+module.exports = { alreadyExists }

@@ -2,8 +2,8 @@ const axios = require('axios')
 const fs = require('fs')
 const FormData = require('form-data')
 const core = require('@actions/core')
-const { form_graphql_headers } = require('./headers')
-const { SpecParsingError } = require('./errors')
+const { formGraphqlHeaders } = require('./headers')
+const { SpecParsingError, UnexpectedStatusError } = require('./errors')
 
 /**
  * Creates and returns a new API version for a given API
@@ -12,57 +12,57 @@ const { SpecParsingError } = require('./errors')
  * @param {object} client The GraphQL Client object for reuse
  * @returns {string} The id of the newly created API version
  */
-async function update_api_version(spec_path, api_version_id) {
-    const graphql_url = core.getInput('GRAPHQL_URL', { required: true })
-    const query = `
+async function updateApiVersion (specPath, apiVersionId) {
+  const graphqlUrl = core.getInput('GRAPHQL_URL', { required: true })
+  const query = `
         mutation updateApisFromRapidOas($updates: [ApiUpdateFromRapidOasInput!]!) {
         updateApisFromRapidOas(updates: $updates) {
             apiId
         }
     }`
 
-    const variables = {
-        updates: {
-            spec: null,
-            apiVersionId: api_version_id,
-        },
+  const variables = {
+    updates: {
+      spec: null,
+      apiVersionId
     }
+  }
 
-    let updates_file = fs.readFileSync(spec_path)
+  const updatesFile = fs.readFileSync(specPath)
 
-    let fd = new FormData()
-    fd.append('operations', JSON.stringify({ query, variables }))
-    fd.append('map', '{"0":["variables.updates.spec"]}')
-    fd.append('0', updates_file, {
-        filename: 'spec.json',
-        contentType: 'application/json',
-    })
+  const fd = new FormData()
+  fd.append('operations', JSON.stringify({ query, variables }))
+  fd.append('map', '{"0":["variables.updates.spec"]}')
+  fd.append('0', updatesFile, {
+    filename: 'spec.json',
+    contentType: 'application/json'
+  })
 
-    let options = {
-        method: 'POST',
-        url: graphql_url,
-        headers: Object.assign(form_graphql_headers(), fd.getHeaders()),
-        data: fd,
-    }
+  const options = {
+    method: 'POST',
+    url: graphqlUrl,
+    headers: Object.assign(formGraphqlHeaders(), fd.getHeaders()),
+    data: fd
+  }
 
-    let res = await axios.request(options)
-    if (res.status == 200 && !res.data.errors) {
-        return res.status
-    } else if (
-        res.status == 200 &&
+  const res = await axios.request(options)
+  if (res.status === 200 && !res.data.errors) {
+    return res.status
+  } else if (
+    res.status === 200 &&
         res.data.errors &&
-        typeof res.data.errors == 'object'
-    ) {
-        // this happens when an unknown collection is part of the spec; we get a 200, but
-        // also an unprocessable_entity error :/
-        error_message = []
-        res.data.errors.forEach((value) => error_message.push(value.message))
-        throw new SpecParsingError(`Error parsing spec: ${error_message}`)
-    } else {
-        throw new UnexpectedStatusError(
+        typeof res.data.errors === 'object'
+  ) {
+    // this happens when an unknown collection is part of the spec; we get a 200, but
+    // also an unprocessable_entity error :/
+    const errorMessage = []
+    res.data.errors.forEach((value) => errorMessage.push(value.message))
+    throw new SpecParsingError(`Error parsing spec: ${errorMessage}`)
+  } else {
+    throw new UnexpectedStatusError(
             `HTTP status is not 200, but ${res.status}`
-        )
-    }
+    )
+  }
 }
 
-module.exports = { update_api_version }
+module.exports = { updateApiVersion }

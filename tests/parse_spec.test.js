@@ -1,24 +1,24 @@
 const {
-    api_version_from_spec,
-    api_name_from_spec,
-    api_description_from_spec,
+  apiVersionFromSpec,
+  apiNameFromSpec,
+  apiDescriptionFromSpec
 } = require('../main/parse_spec')
 
 test('return the version of a spec file correctly', () => {
-    expect(api_version_from_spec(JSON.parse(my_spec))).toBe('1.0.1')
+  expect(apiVersionFromSpec(JSON.parse(mySpec))).toBe('1.0.1')
 })
 
 test('return the name of an API correctly from an OAS', () => {
-    expect(api_name_from_spec(JSON.parse(my_spec))).toBe('My API Name')
+  expect(apiNameFromSpec(JSON.parse(mySpec))).toBe('My API Name')
 })
 
 test('return the description of an API correctly from an OAS', () => {
-    expect(api_description_from_spec(JSON.parse(my_spec))).toBe(
-        "The API's description"
-    )
+  expect(apiDescriptionFromSpec(JSON.parse(mySpec))).toBe(
+    "The API's description"
+  )
 })
 
-const my_spec = `{
+const mySpec = `{
   "openapi": "3.0.0",
   "servers": [
     {

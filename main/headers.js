@@ -1,29 +1,29 @@
 const core = require('@actions/core')
 
-function form_graphql_headers() {
-    let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
-    let x_rapidapi_graphql_host = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
-        required: true,
-    })
+function formGraphqlHeaders () {
+  const xRapidapiKey = core.getInput('X_RAPIDAPI_KEY', { required: true })
+  const xRapidapiGraphqlHost = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
+    required: true
+  })
 
-    return {
-        'content-type': 'multipart/form-data',
-        'x-rapidapi-key': x_rapidapi_key,
-        'x-rapidapi-host': x_rapidapi_graphql_host,
-    }
+  return {
+    'content-type': 'multipart/form-data',
+    'x-rapidapi-key': xRapidapiKey,
+    'x-rapidapi-host': xRapidapiGraphqlHost
+  }
 }
 
-function graphql_headers() {
-    let x_rapidapi_key = core.getInput('X_RAPIDAPI_KEY', { required: true })
-    let x_rapidapi_graphql_host = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
-        required: true,
-    })
+function graphqlHeaders () {
+  const xRapidapiKey = core.getInput('X_RAPIDAPI_KEY', { required: true })
+  const xRapidapiGraphqlHost = core.getInput('X_RAPIDAPI_GRAPHQL_HOST', {
+    required: true
+  })
 
-    return {
-        'content-type': 'application/json',
-        'x-rapidapi-key': x_rapidapi_key,
-        'x-rapidapi-host': x_rapidapi_graphql_host,
-    }
+  return {
+    'content-type': 'application/json',
+    'x-rapidapi-key': xRapidapiKey,
+    'x-rapidapi-host': xRapidapiGraphqlHost
+  }
 }
 
-module.exports = { form_graphql_headers, graphql_headers }
+module.exports = { formGraphqlHeaders, graphqlHeaders }

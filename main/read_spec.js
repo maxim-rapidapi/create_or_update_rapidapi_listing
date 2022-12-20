@@ -5,18 +5,18 @@ const fs = require('fs')
  * @param {string} oas Path to OAS
  * @return {string} The contents of the OAS
  */
-function read_spec(oas) {
+function readSpec (oas) {
+  try {
+    const spec = fs.readFileSync(oas)
     try {
-        let spec = fs.readFileSync(oas)
-        try {
-            return JSON.parse(spec)
-        } catch (err) {
-            throw "Couldn't parse file: " + oas
-        }
+      return JSON.parse(spec)
     } catch (err) {
-        console.log(err)
-        throw 'Could not read file: ' + oas
+      throw new Error("Couldn't parse file: " + oas)
     }
+  } catch (err) {
+    console.log(err)
+    throw new Error('Could not read file: ' + oas)
+  }
 }
 
-module.exports = { read_spec }
+module.exports = { readSpec }

@@ -1,11 +1,11 @@
-const { get_current_api_version } = require('../main/get_current_api_version')
+const { getCurrentApiVersion } = require('../main/get_current_api_version')
 const graphql = require('graphql-request')
 
 afterEach(() => {
-    jest.restoreAllMocks()
+  jest.restoreAllMocks()
 })
 
-const version_list = JSON.parse(`
+const versionList = JSON.parse(`
 { 
     "apiVersions": {
         "nodes": [
@@ -30,25 +30,25 @@ const version_list = JSON.parse(`
 }`)
 
 const result = [
-    [
-        '\n    query apiVersions($where: ApiVersionWhereInput) {\n        apiVersions(where: $where) {\n          nodes {\n            id\n            name\n            current\n          }\n        }\n      }',
-        {
-            where: {
-                apiId: 'api_8ef57cc9-aca9-427d-b643-7d9eec7b5712',
-                versionStatus: 'ACTIVE',
-            },
-        },
-    ],
+  [
+    '\n    query apiVersions($where: ApiVersionWhereInput) {\n        apiVersions(where: $where) {\n          nodes {\n            id\n            name\n            current\n          }\n        }\n      }',
+    {
+      where: {
+        apiId: 'api_8ef57cc9-aca9-427d-b643-7d9eec7b5712',
+        versionStatus: 'ACTIVE'
+      }
+    }
+  ]
 ]
 
 test('test formatting of graphql query for current version', async () => {
-    const c = new graphql.GraphQLClient()
-    const mockClient = jest
-        .spyOn(c, 'request')
-        .mockImplementation((query, variables) => version_list)
-    const response = await get_current_api_version(
-        'api_8ef57cc9-aca9-427d-b643-7d9eec7b5712',
-        c
-    )
-    expect(mockClient.mock.calls).toEqual(result)
+  const c = new graphql.GraphQLClient()
+  const mockClient = jest
+    .spyOn(c, 'request')
+    .mockImplementation((query, variables) => versionList)
+  await getCurrentApiVersion(
+    'api_8ef57cc9-aca9-427d-b643-7d9eec7b5712',
+    c
+  )
+  expect(mockClient.mock.calls).toEqual(result)
 })
