@@ -1,6 +1,9 @@
 name: "Create or update API listing on RapidAPI Hub"
 description: "Use this action to create a new API listing on RapidAPI or update an existing one"
 author: "Maxim Burgerhout"
+branding:
+  icon: "folder-plus"
+  color: "blue"
 inputs:
   owner_id:
     description: "The ID of the team or user that (will) own(s) the API"
