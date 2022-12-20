@@ -33,10 +33,13 @@ jobs:
               uses: maxim-rapidapi/create_or_update_rapidapi_listing@v0
               with:
                   spec_path: openapi.json
+                  owner_id: 12345678
                   graphql_url: https://platform-graphql.p.rapidapi.com/
                   x_rapidapi_key: a-very-long-api-key
                   x_rapidapi_graphql_host: platform-graphql.yourhub.rapidapi.com
 ```
+
+Usually, you would set those variables (`owner_id` etc.) as Action secrets for your repo. In that case, you would refer to them as e.g. `${{ secrets.OWNER_ID }}`, assuming you named the secret storing your owner ID `OWNER_ID`.
 
 ### Inputs
 
