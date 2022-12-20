@@ -1,11 +1,12 @@
 {
-  "name": "create_or_update_rapidapi_nodejs",
-  "version": "1.0.0",
+  "name": "create_or_update_rapidapi_listing",
+  "version": "0.0.4",
   "description": "GitHub Action to create or update an API on RapidAPI",
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "pack": "node node_modules/.bin/ncc build main/index.js -o dist"
+    "pack": "node node_modules/.bin/ncc build main/index.js -o dist",
+    "lint": "node node_modules/.bin/eslint main/*.js tests/*.js"
   },
   "author": "",
   "license": "ISC",

@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - test_env_files
 
 jobs:
   test:
@@ -16,9 +15,9 @@ jobs:
         run: npm install
         id: install
       - name: Run jest
-        run: npm test
+        run: npm run test
       - name: Run eslint
-        run: Run eslint main/*.js tests/*.js
+        run: npm run lint
 
   build:
     name: Build and push dist/index.js
